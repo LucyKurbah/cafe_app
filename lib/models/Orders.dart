@@ -8,7 +8,7 @@ class Order {
   required this.image, required this.order_date});
 
   factory Order.fromJson(Map<String, dynamic> json) {
-    print(json);
+
     return Order(
       item_name :  json['item_name'],
       id: json['id'],

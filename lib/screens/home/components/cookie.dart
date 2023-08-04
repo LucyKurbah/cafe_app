@@ -1,6 +1,6 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
+
+import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 class CookiePage extends StatelessWidget {
@@ -9,12 +9,12 @@ class CookiePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFCFAF8),
+      backgroundColor: textColor,
       body: ListView(
           children: [
-            SizedBox(height: 15.0,),
+           const  SizedBox(height: 15.0,),
             Container(
-              padding: EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.only(right: 15.0),
               width: MediaQuery.of(context).size.width - 30.0,
               height: MediaQuery.of(context).size.width - 50.0,
               child: GridView.count(
@@ -23,9 +23,7 @@ class CookiePage extends StatelessWidget {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 15.0,
                 childAspectRatio: 0.0,
-                children: [
-                  
-                ],
+                
                 ),
             ),
           ],

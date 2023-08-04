@@ -6,7 +6,7 @@ class ApiConstants {
 
   static String right_now_ip=office_ip;
 
-  static String baseUrl = 'http://'+right_now_ip+'/api';
+  static String baseUrl = 'http://$right_now_ip/api';
   static String ipUrl = 'http://10.179.2.187';
   //LOGIN
   static String loginUrl = '$baseUrl/login';
@@ -41,8 +41,10 @@ class ApiConstants {
   //ORDER
   static String getOrdersUrl = '$baseUrl/order/getOrdersList';
   static String getOrdersDetailsUrl = '$baseUrl/order/getOrdersDetails';
+  //FAQS
+  static String getFaqsUrl = '$baseUrl/faq/getFaqsList';
   //MISC
-  static String imagePath = "http://"+right_now_ip+"/";
+  static String imagePath = "http://$right_now_ip/";
   static String imageUrl = "$baseUrl/$imagePath";
   static String serverError = 'Servor Error';
   static String unauthorized = 'Unauthorized';

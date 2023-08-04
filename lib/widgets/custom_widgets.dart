@@ -1,22 +1,24 @@
 import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/dimensions.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_cafe/getx/product_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../components/dimensions.dart';
-// import 'screens/list_cart_products.dart';
+import 'Constants.dart';
 
 showSnackBar(
     {required title,
     required message,
     Duration? duration,
     position: SnackPosition.BOTTOM}) {
+  double bottomPadding = position == SnackPosition.BOTTOM
+      ? kBottomNavigationBarHeight + 40.0 // Add some extra spacing
+      : 0.0;
   Get.snackbar(title, message,
-      backgroundColor: (title=='error')?Colors.redAccent:Colors.grey,
-      colorText: Colors.white,
+      backgroundColor: (title == 'error') ? Colors.redAccent : greyColor,
+      colorText: textColor,
       snackPosition: position,
-      margin: EdgeInsets.all( 10),
+      margin: EdgeInsets.fromLTRB(
+          10, 10, 10, bottomPadding), // Add padding at the bottom
       duration: duration ?? const Duration(seconds: 2));
 }
 
@@ -38,6 +40,7 @@ Widget textView(String text,
     bool needUnderLine = false,
     needFancyFont = false}) {
   return Align(
+    alignment: alignment,
     child: Text(
       text,
       style: needFancyFont
@@ -70,7 +73,6 @@ Widget textView(String text,
       textAlign: textAlign,
       textDirection: textDirection,
     ),
-    alignment: alignment,
   );
 }
 
@@ -87,69 +89,92 @@ hSpace(width) {
 }
 
 // ignore: non_constant_identifier_names
-BigText(text, [color=Colors.white,size, overFlow = TextOverflow.ellipsis]){
+BigText(text, [color = Colors.white, size, overFlow = TextOverflow.ellipsis]) {
   return Text(
-    text, 
+    text,
     overflow: overFlow,
     style: TextStyle(
-      color: color,
-      fontWeight: FontWeight.w400,
-      fontSize: size == 0.0?Dimensions.font20:size
-    ),
-
+        color: color,
+        fontWeight: FontWeight.w400,
+        fontSize: size == 0.0 ? Dimensions.font20 : size),
   );
 }
 
-SmallText(text, [color=Colors.white,size=15.0, overFlow = TextOverflow.ellipsis]){
+SmallText(text,
+    [color = Colors.white, size = 15.0, overFlow = TextOverflow.ellipsis]) {
   return Text(
-    text, 
+    text,
     overflow: overFlow,
     style: TextStyle(
-      color: color,
-      fontWeight: FontWeight.w400,
-      fontSize: size,
-      height: 1.2
-    ),
-
+        color: color, fontWeight: FontWeight.w400, fontSize: size, height: 1.2),
   );
 }
 
-IconText(icon, iconColor, text, text_color)
-{
+IconText(icon, iconColor, text, text_color) {
   return Row(
     children: [
-      Icon(icon,color:iconColor, size: Dimensions.iconSize24,),
-      SizedBox(width: Dimensions.width10,),
-      SmallText(text,text_color)
+      Icon(
+        icon,
+        color: iconColor,
+        size: Dimensions.iconSize24,
+      ),
+      SizedBox(
+        width: Dimensions.width10,
+      ),
+      SmallText(text, text_color)
     ],
   );
 }
 
-// Widget cartIcon(ProductController productController) {
-//   return Obx(
-//     () => Stack(
-//       children: [
-//         IconButton(
-//             onPressed: () {
-//               Get.to(() => const CartProductsList());
-//             },
-//             icon: const Icon(Icons.shopping_cart)),
-//         if (productController.cartProducts.isNotEmpty)
-//           Positioned(
-//             top: 5,
-//             right: 5,
-//             child: Container(
-//               height: 20,
-//               width: 20,
-//               decoration: const BoxDecoration(
-//                   color: Colors.black87, shape: BoxShape.circle),
-//               child: textView('${productController.cartProducts.length}',
-//                   color: Colors.white,
-//                   alignment: Alignment.center,
-//                   fontSize: 10),
-//             ),
-//           )
-//       ],
-//     ),
-//   );
-// }
+Widget button(
+    {required dynamic child,
+    Color color = Constants.colorPrimary,
+    double height = 50.0,
+    double width = double.infinity,
+    IconData? icon,
+    VoidCallback? onPressed}) {
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+          child: child is String
+              ? icon != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(icon, color: Constants.colorLight, size: 16),
+                          Constants.horizontalSpace,
+                          Expanded(
+                            child: Text(child,
+                                style: TextStyle(
+                                  color: color == Constants.colorWarning
+                                      ? mainColor
+                                      : textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.visible),
+                          )
+                        ],
+                      ),
+                    )
+                  : Text(
+                      child,
+                      style:  TextStyle(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    )
+              : child),
+    ),
+  );
+}

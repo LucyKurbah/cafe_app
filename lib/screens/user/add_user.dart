@@ -21,20 +21,12 @@ class _AddUserScreenState extends State<AddUserScreen> {
         actions: [
           IconButton(
             onPressed: (){
-                final name = controller.text;
                 //createUser(name: name);
             }, 
-            icon: Icon(Icons.add))
+            icon: const Icon(Icons.add))
         ],
       ),
     );
   }
-  
-  // Future createUser({required String name}) async {
-  //   final docUser = FirebaseFirestore.instance.collection('users').doc('12345');
-  //   final json ={
-  //     'name' : name
-  //   };
-  //   await docUser.set(json);
-  // }
+ 
 }

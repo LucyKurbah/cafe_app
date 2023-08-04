@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../api/apiFile.dart';
 import '../models/Table.dart';
-import '../models/Order.dart';
 import 'api_response.dart';
 
 
@@ -45,7 +44,6 @@ Future<ApiResponse> getTables() async{
 convertDateToPostgres(bookDate){
     DateTime date = DateFormat('dd-MM-yyyy').parse(bookDate);
     print(date);
-    String formattedDate = '${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     return('${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}');
    
   }
@@ -63,7 +61,6 @@ Future<ApiResponse> getTableDetails(table_id, timeFrom, timeTo, bookDate) async{
   ApiResponse apiResponse = ApiResponse();
   try {
     String token = await getToken();
-    int userId = await getUserId();
     String formattedDate=convertDateToPostgres(bookDate);
     String time_from = (convertTimeToPostgres(timeFrom,bookDate));
     String time_to = (convertTimeToPostgres(timeTo,bookDate));

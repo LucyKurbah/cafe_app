@@ -1,5 +1,4 @@
 import 'package:cafe_app/models/Table.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../api/apiFile.dart';
@@ -101,6 +100,11 @@ Future<ApiResponse> addItemToCart(AddOn item) async{
   try {
     String token = await getToken();
     int userId = await getUserId();
+    if(userId =='' || userId == 0)
+    {
+        apiResponse.error = ApiConstants.notLoggedIn;
+        return apiResponse;
+    }
   
     final response = await http.post(Uri.parse(ApiConstants.addCartUrl),
                 headers: {
@@ -109,13 +113,13 @@ Future<ApiResponse> addItemToCart(AddOn item) async{
                 },
                 body:{
                         'user_id': userId.toString(),
-                       
                         'item_id' : item.id.toString(),
                         'item_price' : item.price.toString(),
                         'item_quantity' : "1",
                         'flag' : 'I'
                     },   
                );
+               print(response.statusCode);
     switch(response.statusCode)
     {
       case 200:
@@ -124,6 +128,9 @@ Future<ApiResponse> addItemToCart(AddOn item) async{
         break;
       case 401:
         apiResponse.error = ApiConstants.unauthorized;
+        break;
+      case 500:
+        apiResponse.error = ApiConstants.notLoggedIn;
         break;
       default:
          apiResponse.error = response.statusCode.toString();
@@ -462,7 +469,7 @@ Future<ApiResponse> getTotal() async{
   return apiResponse;
 }
 
-Future<ApiResponse> saveOrder(_cartList, totalPrice) async{
+Future<ApiResponse> saveOrder(cartList, totalPrice) async{
   ApiResponse apiResponse = ApiResponse();
  try {
     String token = await getToken();

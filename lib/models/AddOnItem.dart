@@ -20,7 +20,7 @@ class AddOnItem{
     Map<String,dynamic> second =product.toMap();
 
     return({...first, ...second});
-    return first;
+
     // var finalList = first.addAll(second);
     // return finalList;
   }

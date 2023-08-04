@@ -1,30 +1,37 @@
-
 import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../constraints/constants.dart';
 
-class ProfileSkelton extends StatelessWidget{
-const ProfileSkelton({
+class ProfileSkelton extends StatelessWidget {
+  const ProfileSkelton({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(height: 50,),
-        const CircleSkeleton(size: 124,),
-        const SizedBox(height: defaultPadding),
-        const Skeleton(width: 150),
-        const SizedBox(height: defaultPadding ),
-        const Skeleton(width: 50,),
-        const SizedBox(height: defaultPadding),
-        const Skeleton(width: 250,),
-        const SizedBox(height: defaultPadding),
+        SizedBox(
+          height: 50,
+        ),
+        CircleSkeleton(
+          size: 124,
+        ),
+        SizedBox(height: defaultPadding),
+        Skeleton(width: 150),
+        SizedBox(height: defaultPadding),
+        Skeleton(
+          width: 50,
+        ),
+        SizedBox(height: defaultPadding),
+        Skeleton(
+          width: 250,
+        ),
+        SizedBox(height: defaultPadding),
         Row(
-          children: const [
+          children: [
             Expanded(
               child: Skeleton(),
             ),
@@ -36,7 +43,7 @@ const ProfileSkelton({
         ),
         SizedBox(height: defaultPadding),
         Row(
-          children: const [
+          children: [
             Expanded(
               child: Skeleton(),
             ),
@@ -46,11 +53,10 @@ const ProfileSkelton({
             ),
           ],
         ),
-         const SizedBox(height: defaultPadding),
-        const Skeleton(width: 150),
-        const SizedBox(height: defaultPadding),
-        const Skeleton(width: 250,),
-        
+        SizedBox(height: defaultPadding),
+        Skeleton(width: 150),
+        SizedBox(height: defaultPadding),
+        Skeleton( width: 250),
       ],
     );
   }
@@ -58,7 +64,6 @@ const ProfileSkelton({
 
 class Skeleton extends StatelessWidget {
   const Skeleton({Key? key, this.height, this.width}) : super(key: key);
-
   final double? height, width;
 
   @override
@@ -68,7 +73,7 @@ class Skeleton extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(defaultPadding / 2),
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 243, 239, 239).withOpacity(0.1),
+          color:const Color.fromARGB(255, 243, 239, 239).withOpacity(0.1),
           borderRadius:
               const BorderRadius.all(Radius.circular(defaultPadding))),
     );
@@ -77,7 +82,6 @@ class Skeleton extends StatelessWidget {
 
 class CircleSkeleton extends StatelessWidget {
   const CircleSkeleton({Key? key, this.size = 24}) : super(key: key);
-
   final double? size;
 
   @override
@@ -92,5 +96,3 @@ class CircleSkeleton extends StatelessWidget {
     );
   }
 }
-
-

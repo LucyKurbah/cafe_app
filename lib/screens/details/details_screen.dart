@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/fav_btn.dart';
 import 'package:cafe_app/components/price.dart';
 import 'package:cafe_app/constraints/constants.dart';
@@ -36,12 +37,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 });
                 Navigator.pop(context);
               },
-              child: Text("Add to Cart"),
+              child:const Text("Add to Cart"),
             ),
           ),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: textColor,
       appBar: buildAppBar(),
       body: Column(
         children: [
@@ -53,20 +54,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
               children: [
                 Container(
                   width: double.infinity,
-                  color: Colors.black,
+                  color: mainColor,
                   child: Hero(
                     tag: widget.product.title + _cartTag,
                     child: Image.asset(widget.product.image),
                   ),
                 ),
-                Positioned(
+                const Positioned(
                   bottom: -20,
                   child: CartCounter(),
                 )
               ],
             ),
           ),
-          SizedBox(height: defaultPadding * 1.5),
+          const SizedBox(height: defaultPadding * 1.5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Row(
@@ -76,20 +77,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     widget.product.title,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6!
+                        .titleLarge!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                Price(amount: "20.00"),
+                const Price(amount: "20.00"),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(defaultPadding),
+           Padding(
+            padding:  const EdgeInsets.all(defaultPadding),
             child: Text(
               "Cabbage (comprising several cultivars of Brassica oleracea) is a leafy green, red (purple), or white (pale green) biennial plant grown as an annual vegetable crop for its dense-leaved heads. It is descended from the wild cabbage (B. oleracea var. oleracea), and belongs to the cole crops or brassicas, meaning it is closely related to broccoli and cauliflower (var. botrytis); Brussels sprouts (var. gemmifera); and Savoy cabbage (var. sabauda).",
               style: TextStyle(
-                color: Color(0xFFBDBDBD),
+                color: lightGrey,
                 height: 1.8,
               ),
             ),
@@ -102,16 +103,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
   AppBar buildAppBar() {
     return AppBar(
       leading: BackButton(
-        color: Colors.black,
+        color: mainColor,
       ),
-      backgroundColor: Color(0xFFF8F8F8),
+      backgroundColor: textColor,
       elevation: 0,
       centerTitle: true,
       title: Text(
         "Fruits",
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: mainColor),
       ),
-      actions: [
+      actions: const[
         FavBtn(radius: 20),
         SizedBox(width: defaultPadding),
       ],

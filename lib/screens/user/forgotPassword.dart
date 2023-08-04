@@ -1,4 +1,6 @@
 
+import 'package:cafe_app/components/colors.dart';
+import 'package:cafe_app/components/dimensions.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_app/controllers/forgotPassword_controller.dart';
@@ -27,15 +29,15 @@ bool loading = false;
            height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(begin: Alignment.topCenter, colors: [
-            Colors.black,
-            // Colors.black,
-            Colors.grey
+            mainColor,
+            // mainColor,
+            greyColor
           ])),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-              height: 20,
+              height: Dimensions.height20,
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -43,22 +45,22 @@ bool loading = false;
             onPressed: (){
               Navigator.of(context).pop();
             }, 
-            icon: Icon(Icons.arrow_back), color: Colors.white,)
+            icon: const Icon(Icons.arrow_back), color: textColor,)
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Reset Password",
-                      style: TextStyle(color: Colors.white, fontSize: 30),
+                      style: TextStyle(color: textColor, fontSize: 30),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: Dimensions.height10,
                     ),
                   ],
                 ),
@@ -68,38 +70,38 @@ bool loading = false;
                 key: formKey,
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                      color: textColor,
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(60),
                           topRight: Radius.circular(60))),
                   child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding:const  EdgeInsets.all(20),
                     child: Column(
                        mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 60,
                         ),
                         Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: textColor,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
+                              boxShadow:  [
                                 BoxShadow(
-                                    color: Colors.grey,
+                                    color: greyColor,
                                     blurRadius: 20,
-                                    offset: Offset(0, 10))
+                                    offset: const Offset(0, 10))
                               ]),
                           child: Column(
                             children: [
                              
                               Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration:  BoxDecoration(
                                       border: Border(
                                           bottom:
-                                              BorderSide(color: Colors.grey))),
+                                              BorderSide(color: greyColor))),
                                   child: TextFormField(
                                     keyboardType: TextInputType.emailAddress,
                                     controller:
@@ -107,25 +109,25 @@ bool loading = false;
                                     validator: (value) => value!.isEmpty
                                         ? 'Invalid Email Address'
                                         : null,
-                                    style: TextStyle(fontSize: 18.0),
-                                    decoration: InputDecoration(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    decoration:  InputDecoration(
                                         hintText: "Email",
-                                        hintStyle: TextStyle(color: Colors.grey),
+                                        hintStyle: TextStyle(color: greyColor),
                                         border: InputBorder.none),
                                   )),
                               
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
                         kLoginRegisterHint('Already have an account? ', 'Login',
                             () {
-                          Get.to(Login(),
+                          Get.to(const Login(),
                               transition: Transition.rightToLeftWithFade);
                         }),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
                         Container(
@@ -133,28 +135,28 @@ bool loading = false;
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.grey[700],
+                              color: greyColor7,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
+                                  color: greyColor.withOpacity(0.5),
                                   spreadRadius: 3,
                                   blurRadius: 7,
                                   offset:
-                                      Offset(0, 3), // changes position of shadow
+                                      const Offset(0, 3), // changes position of shadow
                                 ),
                               ]),
                           child: Center(
                             child: 
                             
                             loading
-                                ? Center(
+                                ? const Center(
                                     child: CircularProgressIndicator(),
                                   )
                                 : TextButton(
                                 child: Text(
                                   'Reset Password',
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: textColor,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),

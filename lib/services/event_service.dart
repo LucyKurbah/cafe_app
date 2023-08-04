@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../api/apiFile.dart';
-import '../models/AddOn.dart';
 import '../models/Event.dart';
 import 'api_response.dart';
 

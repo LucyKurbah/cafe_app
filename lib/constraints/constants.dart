@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 const defaultPadding = 20.0;
@@ -10,54 +11,45 @@ const primaryColor = Color(0xFF40A944);
 const panelTransition = Duration(milliseconds: 500);
 const Color grayColor = Color(0xFF8D8D8E);
 
-
-
-InputDecoration kInputDecoration(String label){
-   return InputDecoration(
-                labelText: label,
-                contentPadding: EdgeInsets.all(10),
-                border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.white))
-              );
+InputDecoration kInputDecoration(String label) {
+  return InputDecoration(
+      labelText: label,
+      contentPadding: const EdgeInsets.all(10),
+      border: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: textColor)));
 }
 
-TextButton kTextButton(String label, Function onPressed){
+TextButton kTextButton(String label, Function onPressed) {
   return TextButton(
-             
-      style: ButtonStyle(
-                 backgroundColor: MaterialStateColor.resolveWith((states) => Colors.blue),
-                 padding: MaterialStateProperty.resolveWith((states) =>   EdgeInsets.symmetric(vertical: 10))
-              ),
-      child: Text(label, style: TextStyle(color: Colors.white)),
-       onPressed: () => onPressed(),
-      );
-             
-}
-
-
-Row kLoginRegisterHint(String text, String label, Function onTap)
-{
-  return  Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(text),
-                GestureDetector(
-                        child: Text(label, style: TextStyle(color: Colors.blue),),
-                        onTap: (() => onTap()
-                      ))
-              ]
+    style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => blueColor),
+        padding: MaterialStateProperty.resolveWith(
+            (states) => const EdgeInsets.symmetric(vertical: 10))),
+    child: Text(label, style: TextStyle(color: textColor)),
+    onPressed: () => onPressed(),
   );
 }
 
-Row kLoginForgotPasswordHint(String text, String label, Function onTap)
-{
-  return  Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(text),
-                GestureDetector(
-                        child: Text(label, style: TextStyle(color: Colors.blue),),
-                        onTap: (() => onTap()
-                      ))
-              ]
-  );
+Row kLoginRegisterHint(String text, String label, Function onTap) {
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    Text(text),
+    GestureDetector(
+        onTap: (() => onTap()),
+        child: Text(
+          label,
+          style: TextStyle(color: blueColor),
+        ))
+  ]);
+}
+
+Row kLoginForgotPasswordHint(String text, String label, Function onTap) {
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    Text(text),
+    GestureDetector(
+        onTap: (() => onTap()),
+        child: Text(
+          label,
+          style: TextStyle(color: blueColor),
+        ))
+  ]);
 }

@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constraints/constants.dart';
@@ -18,9 +19,9 @@ class RoundIconBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       padding: EdgeInsets.zero,
-      shape: CircleBorder(),
+      shape:const CircleBorder(),
       elevation: 0,
-      color: Colors.white,
+      color: textColor,
       height: 36,
       minWidth: 36,
       onPressed: press,

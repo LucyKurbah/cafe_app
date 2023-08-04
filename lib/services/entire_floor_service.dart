@@ -4,11 +4,8 @@ import 'dart:convert';
 import 'package:cafe_app/services/table_service.dart';
 import 'package:cafe_app/services/user_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import '../api/apiFile.dart';
-import '../models/Order.dart';
 import '../models/EntireFloor.dart';
-import '../screens/entire_floor/entire_floor_screen.dart';
 import 'api_response.dart';
 
 
@@ -51,7 +48,6 @@ Future<ApiResponse> checkFloorDetails(floor_id,date) async{
   try {
    
     String token = await getToken();
-    int userId = await getUserId();
     String formattedDate=convertDateToPostgres(date);
 
     final response = await http.post(Uri.parse(ApiConstants.checkFloorDetailsUrl),
@@ -65,7 +61,7 @@ Future<ApiResponse> checkFloorDetails(floor_id,date) async{
                     },
                );
     print("Entire floor details");
-    print(response.statusCode);
+    print(response.body);
     switch(response.statusCode)
     {
       case 200:

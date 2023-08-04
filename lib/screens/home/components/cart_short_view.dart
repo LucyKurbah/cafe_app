@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +16,9 @@ class CardShortView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child:  Icon(Icons.shopping_cart,color: Color(0xffe57734),size: 27,)
+          Padding(
+          padding:  const EdgeInsets.only(right: 5),
+          child:  Icon(Icons.shopping_cart,color: iconColors1,size: 27,)
         ),
           IconButton(
             onPressed: (){},
@@ -37,7 +38,7 @@ class CardShortView extends StatelessWidget {
                   child: Hero(
                     tag: "${controller.cart[index].product.title}_cartTag",
                     child: CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: textColor,
                       backgroundImage:
                           NetworkImage(controller.cart[index].product.image),
                     ),
@@ -48,10 +49,10 @@ class CardShortView extends StatelessWidget {
           ),
         ),
         CircleAvatar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: transparentColor,
           child: Text(
             controller.totalCartItems().toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, color:  Color(0xffe57734)),
+            style:   TextStyle(fontWeight: FontWeight.bold, color:  iconColors1),
           ),
           // Icon(Icons.circle_outlined,color: Color(0xffe57734),size: 27,),
         )

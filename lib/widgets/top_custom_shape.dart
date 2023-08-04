@@ -1,7 +1,7 @@
+import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/models/ProfileModel.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_app/components/colors.dart';
-import 'package:cafe_app/components/size_config.dart';
 import 'package:cafe_app/components/custom_shape.dart';
 
 class TopCustomShape extends StatefulWidget {
@@ -24,7 +24,7 @@ class _TopCustomShapeState extends State<TopCustomShape> {
             clipper: CustomShape(),
             child: Container(
               height: 150,//SizeConfig.screenHeight!/4.56,       /// 150.0
-              color: Colors.black,
+              color: mainColor,
             ),
           ),
           Center(
@@ -32,13 +32,13 @@ class _TopCustomShapeState extends State<TopCustomShape> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
                   height: 140.0,
                   width: 140.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 0.0),
-                    color: Colors.white,
+                    border: Border.all(color: mainColor, width: 0.0),
+                    color: textColor,
                   ),
                   child: Image.asset(
                     "Assets/Images/user.png",
@@ -46,9 +46,9 @@ class _TopCustomShapeState extends State<TopCustomShape> {
                     
                   ),
                 ),
-                Text("${widget.profileInfo.name}", style: TextStyle(fontSize: 22,color: Colors.white),),
-                SizedBox(height: 5,),//SizeConfig.screenHeight!/136.6,),              /// 5.0
-                Text("${widget.profileInfo.email}", style: TextStyle(fontWeight: FontWeight.w400, color: Colors.white),)
+                Text(widget.profileInfo.name, style: TextStyle(fontSize: 22,color: textColor),),
+                SizedBox(height: Dimensions.height5,),//SizeConfig.screenHeight!/136.6,),              /// 5.0
+                Text(widget.profileInfo.email, style: TextStyle(fontWeight: FontWeight.w400, color: textColor),)
               ],
             ),
           )

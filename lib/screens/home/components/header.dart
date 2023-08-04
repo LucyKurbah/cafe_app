@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constraints/constants.dart';
@@ -11,7 +12,7 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: headerHeight,
-      color: Colors.black,
+      color: mainColor,
       padding: const EdgeInsets.all(defaultPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,12 +28,12 @@ class HomeHeader extends StatelessWidget {
                 "Caesar Rincon",
                 style: Theme.of(context)
                     .textTheme
-                    .subtitle1!
+                    .titleMedium!
                     .copyWith(color: Colors.black54),
               )
             ],
           ),
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.transparent,
             backgroundImage: AssetImage("assets/images/profile.png"),
           )

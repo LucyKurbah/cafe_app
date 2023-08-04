@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:cafe_app/services/table_service.dart';
 import 'package:cafe_app/services/user_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../api/apiFile.dart';
-import '../models/Order.dart';
 import '../models/Conference.dart';
 import 'api_response.dart';
 
@@ -44,7 +42,6 @@ Future<ApiResponse> getConference() async{
 convertDateToPostgres(bookDate){
     DateTime date = DateFormat('dd-MM-yyyy').parse(bookDate);
     print(date);
-    String formattedDate = '${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     return('${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}');
    
   }
@@ -80,8 +77,7 @@ Future<ApiResponse> checkConferenceHallDetails(id, time_from, time_to, date) asy
                       'conference_date' : formattedDate.toString()
                     },
                );
-    print("object");
-    print(response.statusCode);
+
     switch(response.statusCode)
     {
       case 200:

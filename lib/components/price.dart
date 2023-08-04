@@ -1,3 +1,4 @@
+import 'package:cafe_app/components/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../constraints/constants.dart';
@@ -13,15 +14,15 @@ class Price extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        text: "\₹ ",
+        text: " ₹ ",
         style: Theme.of(context)
             .textTheme
-            .subtitle1!
+            .titleMedium!
             .copyWith(fontWeight: FontWeight.w600, color: primaryColor),
         children: [
           TextSpan(
             text: amount,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: textColor),
           ),
          
         ],

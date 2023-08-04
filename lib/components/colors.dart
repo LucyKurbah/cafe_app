@@ -1,15 +1,23 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 var mainColor =  Colors.black;
 var greyColor = Colors.grey;
-var buttonColor = Color(0xFFFFFF);
+var lightGrey = const Color(0xFFBDBDBD);
+var greyColor6 = Colors.grey[600];
+var greyColor7 = Colors.grey[700];
+var greyColor8 = Colors.grey[800];
+var greyColor9 = Colors.grey[900];
+var blueColor = Colors.blue;
+var blueGrey = Colors.blueGrey;
+var lightBlueGrey = const Color(0xFF676E79);
+var darkGrey =const Color.fromARGB(255, 26, 25, 25);
+var buttonColor = const Color(0x00ffffff);
 var textColor =  Colors.white;
-var iconColors1 = Color(0xffE57734);
-var iconColors3 = Color.fromARGB(255, 170, 238, 253);
-var iconColors2 = Color(0xFFffd28d);
-var iconColors4 = Color.fromARGB(255, 165, 164, 163);
-var signColor = Color(0xFFa9a29f);
-var titleColor = Color(0xFF5c524f);
-
-// var buttonColorNew = Color(0xFFFF9505);
+var iconColors1 = const Color(0xffE57734);
+var iconColors3 =const Color.fromARGB(255, 170, 238, 253);
+var iconColors2 = const Color(0xFFffd28d);
+var iconColors4 =const Color.fromARGB(255, 165, 164, 163);
+var signColor = const Color(0xFFa9a29f);
+var titleColor = const Color(0xFF5c524f);
+var grey9Button = const Color.fromARGB(255, 50, 54, 56);
+var transparentColor = Colors.transparent;

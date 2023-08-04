@@ -1,7 +1,6 @@
 
-import 'dart:developer';
-
-import 'package:cafe_app/components/fav_btn.dart';
+import 'package:cafe_app/components/colors.dart';
+import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/models/Table.dart';
 import 'package:flutter/material.dart';
 import '../../../constraints/constants.dart';
@@ -9,7 +8,7 @@ import '../../../constraints/constants.dart';
 class TableCard extends StatelessWidget {
 
 
-  TableCard({
+  const TableCard({
     Key? key,
     required this.table,
     required this.press,
@@ -27,7 +26,7 @@ class TableCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: greyColor9,
           borderRadius: const BorderRadius.all(
             Radius.circular(defaultPadding * 1.25),
           ),
@@ -50,28 +49,28 @@ class TableCard extends StatelessWidget {
                     )
                    
             ),
-            const SizedBox(height: 10,),
+            SizedBox(height: Dimensions.height10,),
             Text(
               table.table_name,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(fontWeight: FontWeight.w600, fontSize: 18,color: Colors.white),
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.w600, fontSize: 18,color: textColor),
             ),
-            const SizedBox(height: 5,),
+            SizedBox(height: Dimensions.height5,),
             Text(
-               'No. of seats: ${table.table_seats}',
-              style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white),
+               '${table.table_seats} seats',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: textColor),
             ),
-            const SizedBox(height: 20,),
+             SizedBox(height: Dimensions.height20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("₹ ${table.price}",
                  style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(fontWeight: FontWeight.w600, color: Colors.white),),
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.w600, color: textColor),),
                 // const FavBtn(),
               ],
             )

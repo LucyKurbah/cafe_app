@@ -1,5 +1,6 @@
 
 
+import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/fav_btn.dart';
 import 'package:cafe_app/models/Product.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import '../../../constraints/constants.dart';
 class ProductCard extends StatelessWidget {
 
 
-  ProductCard({
+  const ProductCard({
     Key? key,
     required this.product,
      required this.addItem,
@@ -27,7 +28,7 @@ class ProductCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
         decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: greyColor9,
           borderRadius: const BorderRadius.all(
             Radius.circular(defaultPadding * 1.25),
           ),
@@ -46,7 +47,7 @@ class ProductCard extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child:
                               Image.network(
-                                 this.product.image,
+                                 product.image,
                                   fit: BoxFit.contain,
                                   scale: 0.4,
                                 )
@@ -58,12 +59,12 @@ class ProductCard extends StatelessWidget {
               product.title,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(fontWeight: FontWeight.w600, fontSize: 18,color: Colors.white),
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.w600, fontSize: 18,color: textColor),
             ),
             Text(
                product.desc,
-              style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: textColor),
             ),
             const SizedBox(height: 20,),
             Row(
@@ -72,37 +73,11 @@ class ProductCard extends StatelessWidget {
                 Text("₹ ${product.price}",
                  style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(fontWeight: FontWeight.w600, color: Colors.white),),
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.w600, color: textColor),),
                 const FavBtn(),
                 
-                    // Visibility(
-                    //   visible: product.quantity != null && product.quantity != 0,
-                    //   child: Row(
-                    //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //                   crossAxisAlignment: CrossAxisAlignment.center,
-                    //                   children: [
-                                        
-                    //                     GestureDetector(
-                    //                       child: Icon(Icons.delete_rounded, color: Colors.white,),
-                    //                       onTap:removeItem
-                    //                     ),
-                    //                     SizedBox(width: 10,),
-                    //                     Text("${product.quantity}",
-                    //                       style: TextStyle(
-                    //                         fontSize: 16,
-                    //                         color: Colors.white
-                    //                       ),
-                    //                     ),
-                    //                     SizedBox(width: 10,),
-                    //                      GestureDetector(
-                    //                       child: Icon(Icons.add, color: Colors.white),
-                    //                       onTap: addItem,
-                    //                     ),
-                                        
-                    //                   ],
-                    //                 ),
-                    // ),
+                    
               ],
             )
           ],
