@@ -17,13 +17,13 @@ class _TopCustomShapeState extends State<TopCustomShape> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 240,//SizeConfig.screenHeight,               /// 240.0
+      height: 160,//SizeConfig.screenHeight,               /// 240.0
       child: Stack(
         children: [
           ClipPath(
             clipper: CustomShape(),
             child: Container(
-              height: 150,//SizeConfig.screenHeight!/4.56,       /// 150.0
+              height: 120,//SizeConfig.screenHeight!/4.56,       /// 150.0
               color: mainColor,
             ),
           ),
@@ -33,8 +33,8 @@ class _TopCustomShapeState extends State<TopCustomShape> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
-                  height: 140.0,
-                  width: 140.0,
+                  height: 100.0,
+                  width: 100.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: mainColor, width: 0.0),

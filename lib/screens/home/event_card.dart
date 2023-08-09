@@ -23,12 +23,13 @@ class EventCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(Dimensions.radius30),
               color: lightBlueGrey,
               image: DecorationImage(
-                  image: NetworkImage(
-                event.image, //_eventsList[index]['image'],
-                // fit: BoxFit.contain,
-                scale: 0.4,
-              )
-                  // fit: BoxFit.cover
+                  image: 
+                  NetworkImage(
+                    event.image, //_eventsList[index]['image'],
+                    // fit: BoxFit.contain,
+                    scale: 0.9,
+                  ), 
+                  fit: BoxFit.fill
                   )),
         ),
       ]),

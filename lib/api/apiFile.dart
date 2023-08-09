@@ -14,9 +14,10 @@ class ApiConstants {
   static String forgotPasswordUrl = '$baseUrl/forgotPassword';
   static String logoutUrl = '$baseUrl/logout';
   static String userUrl = '$baseUrl/user';
-  //PROFILE
+  //PROFILE 
   static String getProfileUrl = '$baseUrl/getProfile';
   static String saveProfileUrl = '$baseUrl/saveProfile';
+  static String getIdDetailsUrl = '$baseUrl/getIdDetails';
   //EVENTS
   static String getEventsUrl = '$baseUrl/getSliders';
   //MENU & ADD ON

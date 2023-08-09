@@ -99,24 +99,45 @@ class _EventBodyState extends State<EventBody> {
                   matrix = Matrix4.diagonal3Values(1, currScale, 1)
                     ..setTranslationRaw(0, _height * (1 - _scaleFactor) / 2, 1);
                 }
-                return EventCard(
-                  event: _eventsList[index],
-                  matrix: matrix,
-                );
+                return Visibility(
+                    visible: _eventsList[index] != null, // Check if event has a value
+                    maintainState: true,
+                    child: EventCard(
+                      event: _eventsList[index],
+                      matrix: matrix,
+                    ),
+                  );
+                // return EventCard(
+                //   event: _eventsList[index],
+                //   matrix: matrix,
+                // );
               }),
             )),
-        DotsIndicator(
-          dotsCount: dotCount,
-          position: _currPageValue,
-          decorator: DotsDecorator(
-            color: iconColors4.withOpacity(0.3),
+            if (_eventsList.isNotEmpty) // Add this condition
+          DotsIndicator(
+            dotsCount: dotCount,
+            position: _currPageValue,
+            decorator: DotsDecorator(
+              color: iconColors4.withOpacity(0.3),
             activeColor: iconColors4,
             size: const Size.square(6.0),
             activeSize: const Size(10.0, 7.0),
             activeShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radius5)),
+            ),
           ),
-        )
+        // DotsIndicator(
+        //   dotsCount: dotCount,
+        //   position: _currPageValue,
+        //   decorator: DotsDecorator(
+        //     color: iconColors4.withOpacity(0.3),
+        //     activeColor: iconColors4,
+        //     size: const Size.square(6.0),
+        //     activeSize: const Size(10.0, 7.0),
+        //     activeShape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(Dimensions.radius5)),
+        //   ),
+        // )
       ],
     );
   }

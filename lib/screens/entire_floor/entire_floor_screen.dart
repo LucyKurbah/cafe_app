@@ -50,7 +50,7 @@ class _EntireFloorScreenState extends State<EntireFloorScreen> {
         _floorList = response.data as List<dynamic>;
         _loading = _loading ? !_loading : _loading;
       });
-      print(_floorList);
+
     } else if (response.error == ApiConstants.unauthorized) {
       logoutUser();
       Navigator.of(context).pushAndRemoveUntil(

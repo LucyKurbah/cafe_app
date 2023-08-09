@@ -1,19 +1,26 @@
 class ProfileModel{
     
   int id;
-  late String name, doc_image;
-  late String email, phone_no;
+  late String name;
+  late String email, phone_no, doc_image;
+  final Document document;
 
-  ProfileModel({required this.name, required this.doc_image, required this.email, required this.id, required this.phone_no});
+  ProfileModel({    required this.document,required this.doc_image,required this.name, required this.email, required this.id, required this.phone_no});
 
   factory ProfileModel.fromJson(Map<String, dynamic> json){
+        print("JSON DATA___________________________________");
     print(json);
+
     return ProfileModel(
       id : json['id'],
       name : json['name'].toString(),
       doc_image : json['path_file'].toString(),
       email : json['email'].toString(),
       phone_no: json['phone_no'].toString(),
+      document: Document(
+        id: json['document']['id'],
+        document_name: json['document']['document_name'],
+      ),
     );
   }
 
@@ -27,4 +34,14 @@ class ProfileModel{
     };
   }
 
+}
+
+class Document {
+  final int id;
+  final String document_name;
+
+  Document({
+    required this.id,
+    required this.document_name,
+  });
 }
