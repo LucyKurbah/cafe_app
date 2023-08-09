@@ -250,43 +250,45 @@ class _ProfileState extends State<Profile> {
                                       style: TextStyle(color: textColor),
                                 ),
                               )  ,
-                              
-                              SizedBox(height: Dimensions.height20 ),
+                              SizedBox(height: Dimensions.height20),
+                              _profileInfo[0].doc_image != '' ? 
 
-                              Column(
-                                children: [
-                                  Text(
-                                    'Uploaded Document:',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Image.network(
-                                    '${_profileInfo[0].doc_image}',
-                                    width: 200,
-                                    height: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: _pickFile,
-                                        child: Text('Edit Document'),
-                                      ),
-                                      SizedBox(width: 20),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Implement delete document functionality
-                                        },
-                                        child: Text('Delete Document'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              
-                              SizedBox(height: Dimensions.height20 ),
+                             Column(
+                                        children: [
+                                          Text(
+                                            'Uploaded Document:',
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Stack(
+                                            alignment: Alignment.bottomRight,
+                                            children: [
+                                              Image.network(
+                                                '${ _profileInfo[0].doc_image }',
+                                                width: MediaQuery.sizeOf(context).width,
+                                                height: 150,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: _pickFile,
+                                                    icon: Icon(Icons.edit),
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      // Implement delete document functionality
+                                                    },
+                                                    icon: Icon(Icons.delete),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                              :
                               TextButton.icon(
                                 onPressed: _pickFile,
                                 icon: const Icon(Icons.upload_file),
