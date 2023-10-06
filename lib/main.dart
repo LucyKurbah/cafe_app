@@ -1,11 +1,14 @@
 import 'package:cafe_app/components/colors.dart';
+import 'package:cafe_app/screens/onboard/onboard_screen.dart';
 import 'package:cafe_app/screens/orders/my_orders.dart';
+import 'package:cafe_app/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cafe_app/screens/menu/menu.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'controllers/dependency_injection.dart';
 import 'controllers/home_controller.dart';
 import 'screens/table/table_page.dart';
@@ -23,8 +26,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
     importance: Importance.high,
     playSound: true);
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -43,12 +45,18 @@ Future<void> main() async {
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
 
-  runApp(const MyApp());
+  final pref = await SharedPreferences.getInstance();
+  final showHome = pref.getBool('showHome') ?? false;
+  runApp(MyApp(showHome: showHome));
   DependencyInjection.init();
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final bool showHome;
+  const MyApp(
+    {Key? key,
+      required this.showHome
+    }) : super(key:key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -56,7 +64,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _counter = 0;
-
+  
   @override
   void initState() {
     super.initState();
@@ -108,6 +116,12 @@ class _MyAppState extends State<MyApp> {
     print(deviceTokenId);
   }
 
+  void incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
 
   void showNotification() {
     setState(() {
@@ -133,7 +147,7 @@ class _MyAppState extends State<MyApp> {
       child: Builder(builder: (BuildContext context) {
         return GetMaterialApp(
           title: 'Cafe App',
-          home: const Loading(),
+          home: widget.showHome ? const SplashScreen() : const OnboardScreen(),
           routes: {
             '/table': (context) => const TablePage(),
             '/conference': (context) => const ConferenceScreen(),

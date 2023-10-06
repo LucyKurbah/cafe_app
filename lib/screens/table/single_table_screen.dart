@@ -154,7 +154,7 @@ class SingleTableScreen extends StatelessWidget {
 
   void _loadUserInfo(context) async {
     String token = await getToken();
-
+    print("__________________________________________________________________________TOKEN IS ${token}");
     if (token == '' || token == null) {
       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>Login()), (route) => false);
       AlertBox(

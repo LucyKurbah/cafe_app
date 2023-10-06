@@ -29,7 +29,7 @@ class _ProfileState extends State<Profile> {
   bool _isLoading = true;
   List<dynamic> _idList = [].obs;
   int userId = 0;
-  String dropdownvalue = '0';
+  String dropdownvalue = "0";
   bool _loading = true;
     int f_id = 0;
 
@@ -77,10 +77,10 @@ class _ProfileState extends State<Profile> {
       setState(() {
         _profileInfo = response.data as List<dynamic>;
         _nameController = TextEditingController(text: _profileInfo[0].name);
+        print(_profileInfo[0]);
+        dropdownvalue =  "0"; 
         _isLoading = false;
         retrieveIDList();
-        print("PROFILE INFO________________________");
-        print(_profileInfo[0].document.document_name);
       });
     } else {
       setState(() {
@@ -103,6 +103,7 @@ class _ProfileState extends State<Profile> {
         _fileData = base64Encode(_file!.readAsBytesSync());
         var fileData = base64Encode(_file?.readAsBytesSync() as List<int>);
         _fileName = path.basename(_file!.path);
+        _uploadProfile();
       });
     }
     else
@@ -110,19 +111,57 @@ class _ProfileState extends State<Profile> {
       return null;
     }
   }
-
-  void _saveProfile() async {
-
-    ApiResponse response = await saveProfileDetailsApiCall(_nameController.text, _fileName, _fileData,dropdownvalue); // call order service to get orders
+  
+  Future<void> _deleteFile() async {
+     ApiResponse response = await deleteDocument(); // call order service to get orders
     if (response.error == null) {
       setState(() {
+        _loadProfile();
+        _file = null;
         _isLoading = false;
-        showSnackBar(title: 'Document saved', message: '');
+        showSnackBar(title: 'Document deleted', message: '');
+        
       });
     } else {
       setState(() {
         _isLoading = true;
         showSnackBar(title: '${response.error}', message: '');
+      });
+    }
+  }
+
+  void _saveProfile() async {
+    ApiResponse response = await saveProfileDetailsApiCall(_nameController.text,dropdownvalue);
+     // call order service to get orders
+    if (response.error == null) {
+      setState(() {
+        _isLoading = false;
+        showSnackBar(title: 'Saved', message: '');
+        _loadProfile();
+      });
+    } else {
+      setState(() {
+        _isLoading = true;
+        showSnackBar(title: '${response.error}', message: '');
+         _loadProfile();
+      });
+    }
+  }
+
+  void _uploadProfile() async {
+
+    ApiResponse response = await uploadFile( _fileName, _fileData); // call order service to get orders
+    if (response.error == null) {
+      setState(() {
+        _isLoading = false;
+        showSnackBar(title: 'Uploaded', message: '');
+        _loadProfile();
+      });
+    } else {
+      setState(() {
+        _isLoading = true;
+        showSnackBar(title: '${response.error}', message: '');
+         _loadProfile();
       });
     }
   }
@@ -171,12 +210,62 @@ class _ProfileState extends State<Profile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ReadOnlyTextField(
-                                label: 'Name',
-                                defaultText: _nameController.text,
-                                enable: true,
-                              ),
-                              SizedBox(
+                              // ReadOnlyTextField(
+                              //   label: 'Name',
+                              //   defaultText: _nameController.text,
+                              //   enable: true,
+                              // ),
+                              TextField(
+                                    controller: _nameController,
+                                    style:  TextStyle(
+                                      color: textColor,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: "Name",
+                                      labelStyle: TextStyle(color: textColor),
+                                      border:  OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: greyColor,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(8.0),
+                                          bottomRight: Radius.circular(8.0),
+                                        ),
+                                      ),
+                                      enabledBorder:  OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: greyColor,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(8.0),
+                                          bottomRight: Radius.circular(8.0),
+                                        ),
+                                      ),
+                                      disabledBorder:  OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: greyColor,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(8.0),
+                                          bottomRight: Radius.circular(8.0),
+                                        ),
+                                      ),
+                                      focusedBorder:  OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: blueColor,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(8.0),
+                                          bottomRight: Radius.circular(8.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                                                SizedBox(
                                 height: Dimensions.height10,
                               ),
                               ReadOnlyTextField(
@@ -194,15 +283,16 @@ class _ProfileState extends State<Profile> {
                                 enable: false,
                                 //controller: _phoneController
                               ),
+                              
                               SizedBox(height: Dimensions.height20),
                               Text(
-                                'Select ID (PDF/JPEG/JPG)',
+                                'Upload ID:',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                     color: textColor),
                               ),
-                              
+                             
                               SizedBox(height: Dimensions.height10),
                              
                               DropdownButton<String>(
@@ -214,6 +304,7 @@ class _ProfileState extends State<Profile> {
                                         child: Text("Select ID"),
                                       ),
                                       ..._idList.map((floor) {
+                                        // print(floor.id.toString());
                                         return DropdownMenuItem<String>(
                                           value: floor.id.toString(),
                                           child: Text(floor.document_name),
@@ -226,13 +317,13 @@ class _ProfileState extends State<Profile> {
                                         dropdownvalue = newValue!;
                                         if (newValue == "0") {
                                          
-                                          f_id =0; // Set the  ID to null or any other default value
+                                          f_id = 0; // Set the  ID to null or any other default value
                                         } else {
                                           for (var id in _idList) {
                                             if (id.id.toString() ==
                                                 newValue) {
                                             
-                                              f_id = id.id;
+                                              f_id = id.id;//int.parse(newValue.substring(1));
                                             }
                                           }
                                         }
@@ -251,13 +342,12 @@ class _ProfileState extends State<Profile> {
                                 ),
                               )  ,
                               SizedBox(height: Dimensions.height20),
-                              _profileInfo[0].doc_image != '' ? 
-
-                             Column(
+                              _profileInfo[0].doc_image != "" ? 
+                              Column(
                                         children: [
                                           Text(
                                             'Uploaded Document:',
-                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontSize: 13, color: textColor),
                                           ),
                                           SizedBox(height: 10),
                                           Stack(
@@ -272,14 +362,12 @@ class _ProfileState extends State<Profile> {
                                               Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
+                                                  // IconButton(
+                                                  //   onPressed: _pickFile,
+                                                  //   icon: Icon(Icons.edit),
+                                                  // ),
                                                   IconButton(
-                                                    onPressed: _pickFile,
-                                                    icon: Icon(Icons.edit),
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      // Implement delete document functionality
-                                                    },
+                                                    onPressed: _deleteFile,
                                                     icon: Icon(Icons.delete),
                                                   ),
                                                 ],
@@ -296,15 +384,24 @@ class _ProfileState extends State<Profile> {
                                     ? Text(_fileName ?? '')
                                     : const Text('Select file'),
                               ),
-                              _file != null ?
-                              Image.file(_file!): Text("File not Choosen"),
+                              // _file != null ?
+                              // Container(
+                              //       height: 200,
+                              //       width: MediaQuery.of(context).size.width, // Set your desired height here
+                              //       child: _file != null
+                              //           ? Image.file(
+                              //               _file!,
+                              //               fit: BoxFit.cover,
+                              //             )
+                              //           : Text("File not Chosen"),
+                              //     ): Text(""),
                               SizedBox(height: Dimensions.height15),
                                     Center(
                                       child: ElevatedButton(
                                         onPressed: _saveProfile,
                                         child: const Text('Save Profile'),
                                       ),
-                                    ),
+                              ),
                             ],
                           ),
                         )

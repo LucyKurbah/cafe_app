@@ -8,6 +8,8 @@ class IdCard{
     });
 
   factory IdCard.fromJson(Map<String, dynamic> json){
+    print("ID CARD JSON_________________________________");
+    print(json);
     return IdCard(
       id : (json['id']),
       document_name : json['document_name'],

@@ -3,9 +3,11 @@ class Order {
   int id, user_id,  item_id, quantity; 
   double item_price, total;
   String image, item_name, order_date;
+  String time_to, date_time_to, flag;
+
 
   Order({required this.item_name, required this.id, required this.user_id, required this.item_id, required this.quantity, required this.item_price, required this.total,
-  required this.image, required this.order_date});
+  required this.image, required this.order_date, required this.time_to, required this.date_time_to, required this.flag});
 
   factory Order.fromJson(Map<String, dynamic> json) {
 
@@ -19,6 +21,9 @@ class Order {
       user_id: json['user_id'],
       total: double.parse(json['price']),
       order_date : json['order_date'],
+      time_to :  json['time_to'],
+      date_time_to : json['date_time_to'],
+      flag : json['flag']
     );
   }
 
@@ -31,6 +36,9 @@ class Order {
       'quantity': quantity, 
       'user_id': user_id,
       'total' : total,
-      'order_date' : order_date
+      'order_date' : order_date,
+      'time_to' : time_to,
+      'date_time_to': date_time_to,
+      'flag' : flag
   };
 }

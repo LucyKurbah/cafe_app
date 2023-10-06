@@ -74,7 +74,7 @@ class _ConferenceScreenState extends State<ConferenceScreen> {
       newTime = TimeOfDay(hour: timeFrom!.hour, minute: timeFrom!.minute);
     }
     DateTime parsedTime =
-        DateFormat.jm().parse(newTime.format(context).toString());
+        DateFormat.Hm().parse(newTime.format(context).toString());
 
     String formattedTime = DateFormat('h:mm a').format(parsedTime);
 
@@ -283,7 +283,7 @@ class _ConferenceScreenState extends State<ConferenceScreen> {
                                               if (timeFrom != null) {
                                                 try {
                                                   DateTime parsedTime =
-                                                      DateFormat.jm().parse(
+                                                      DateFormat.Hm().parse(
                                                           timeFrom!
                                                               .format(context)
                                                               .toString());

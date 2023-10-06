@@ -4,6 +4,7 @@ import 'package:cafe_app/services/api_response.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_app/services/orders_service.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../widgets/custom_widgets.dart';
 import 'order_details.dart';
 import '../../components/news_card_skelton.dart';
@@ -22,6 +23,17 @@ class _MyOrdersState extends State<MyOrders> {
   final double itemSize = 150;
   late double opacity;
   late double scale;
+
+  List<String> items = [
+    "Processing",
+    "Completed"
+  ];
+
+  List<IconData> icons =[
+    Icons.home,
+    Icons.done_all_outlined
+  ];
+  int current = 0;
 
   void onListenerController() {
     setState(() {});
@@ -61,6 +73,82 @@ class _MyOrdersState extends State<MyOrders> {
               )
             : Column(
                 children: [
+                  SizedBox(
+                    height: 70,
+                    width: double.infinity,
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: items.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index){
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    current = index;
+                                  });
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  margin: EdgeInsets.all(10),
+                                  width: 80,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    color: current==index
+                                            ?textColor
+                                            :greyColor6,
+                                    borderRadius: current == index
+                                    ? BorderRadius.circular(15)
+                                    : BorderRadius.circular(10),
+                                    border: current == index
+                                    ? Border.all(color: greyColor, width: 2)
+                                    : null
+                                    ),
+                                  child: Center(
+                                    child: Text(
+                                      items[index],
+                                      style: GoogleFonts.laila(
+                                        fontWeight: FontWeight.w500,
+                                        color: current == index 
+                                        ? mainColor
+                                        : textColor
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: current ==index,
+                                child: Container(
+                                  width: 5,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: textColor
+                                  ),
+                              ))
+                            ],
+                          );
+                      }),
+                  ),
+                //  Container(
+                //   margin: EdgeInsets.only(top: 30),
+                //   width: double.infinity,
+                //   height: 500,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Icon(icons[current], size: 200, color: textColor,),
+                //       SizedBox(height: 10,),
+                //       Text(items[current], style: GoogleFonts.laila(
+                //         fontWeight: FontWeight.w500,
+                //         color:greyColor6,
+                //         fontSize: 30
+                //       ))
+                //     ],
+                //   ),
+                //  ),
                   Expanded(
                     child: SizedBox(
                       child: ListView.separated(
@@ -155,7 +243,7 @@ class _MyOrdersState extends State<MyOrders> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Order Id : ${product['id']}",
+                            "#${product['id']}",
                             style: TextStyle(color: textColor),
                           ),
                           Text(

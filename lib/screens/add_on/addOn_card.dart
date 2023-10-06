@@ -33,22 +33,24 @@ class AddOnCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              margin: const EdgeInsets.only(top: 10),
-              height: 90,
+              margin: const EdgeInsets.only(top: 20),
+              height: 100,
               width: MediaQuery.of(context).size.width,
               child: Image.network(
                 product.image,
-                fit: BoxFit.contain,
+                fit: BoxFit.fill,
                 scale: 0.4,
               )),
-          const SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: Dimensions.height20,),
           Text(
             product.title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.w600, fontSize: 18, color: textColor),
           ),
+          Text(
+               product.desc,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: textColor),
+            ),
           SizedBox(
             height: Dimensions.height20,
           ),
@@ -62,41 +64,45 @@ class AddOnCard extends StatelessWidget {
                     .titleMedium!
                     .copyWith(fontWeight: FontWeight.w600, color: textColor),
               ),
+              
               Container(
                 padding:
                     const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: iconColors1),
-                child: product.quantity == null || product.quantity == 0
-                    ? InkWell(
+                child: 
+                // product.quantity == null || product.quantity == 0    
+                //     ? 
+                    InkWell(
                         onTap: addItem,
                         child: Text("Add", style: TextStyle(color: textColor)),
                       )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              onTap: removeItem,
-                              child: Text("- ",
-                                  style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold))),
-                          SizedBox(width: Dimensions.width10),
-                          Text(
-                            "${product.id}",
-                            style: TextStyle(
-                                fontSize: Dimensions.font17, color: textColor),
-                          ),
-                          SizedBox(width: Dimensions.width10),
-                          GestureDetector(
-                            onTap: addItem,
-                            child: Icon(Icons.add, color: textColor),
-                          ),
-                        ],
-                      ),
+                    // : 
+                    // Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       GestureDetector(
+                    //           onTap: removeItem,
+                    //           child: Text("- ",
+                    //               style: TextStyle(
+                    //                   color: textColor,
+                    //                   fontSize: 25,
+                    //                   fontWeight: FontWeight.bold))),
+                    //       SizedBox(width: Dimensions.width10),
+                    //       Text(
+                    //         "${product.id}",
+                    //         style: TextStyle(
+                    //             fontSize: Dimensions.font17, color: textColor),
+                    //       ),
+                    //       SizedBox(width: Dimensions.width10),
+                    //       GestureDetector(
+                    //         onTap: addItem,
+                    //         child: Icon(Icons.add, color: textColor),
+                    //       ),
+                    //     ],
+                    //   ),
               ),
             ],
           ),

@@ -135,7 +135,7 @@ Future<ApiResponse> getUserDetails() async {
         'Accept':'application/json',
         'Authorization' : 'Bearer $token'
         });
-
+    print(response.statusCode);
     switch(response.statusCode)
     {
       case 200:   
@@ -158,7 +158,9 @@ Future<ApiResponse> getUserDetails() async {
 
 Future<String> getToken() async{
   SharedPreferences pref = await SharedPreferences.getInstance();
+  
   return pref.getString('token') ?? '';
+   
 
 }
 
@@ -171,6 +173,7 @@ void logoutUser() async{
   SharedPreferences pref = await SharedPreferences.getInstance();
    pref.remove('userId');
    pref.remove('token');
+   pref.setBool('showHome', false);
   //  Get.to(Home());
 }
 

@@ -13,6 +13,8 @@ class OrderDetails extends StatefulWidget {
 
   int order_id;
 
+
+
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
 }
@@ -20,6 +22,7 @@ class OrderDetails extends StatefulWidget {
 class _OrderDetailsState extends State<OrderDetails> {
   List<dynamic> _orderList = [].obs;
   bool _isLoading = true;
+  final DateTime currentTime = DateTime.now(); 
 
   @override
   void initState() {
@@ -49,6 +52,17 @@ class _OrderDetailsState extends State<OrderDetails> {
     }
   }
 
+    bool shouldShowExtendButton() {
+  if (_orderList.isNotEmpty && _orderList[0].time_to != null) {
+    // Parse the string to a DateTime object
+  
+    DateTime timeTo = DateTime.parse(_orderList[0].time_to);
+    // Check if the parsed DateTime is before the current time
+    return timeTo.isAfter(currentTime);
+  }
+  return false; // Default to false if no data or time_to is null
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +81,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
                   Expanded(
                     child: SizedBox(
                       child: ListView.separated(
@@ -79,7 +94,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                   SizedBox(
-                    height: 80, // adjust the height as needed
+                    height: 180, // adjust the height as needed
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
@@ -91,6 +106,36 @@ class _OrderDetailsState extends State<OrderDetails> {
                           SizedBox(height: Dimensions.height10),
                           BigText('Total Amount: ₹ ${_orderList[0].total}',
                               textColor, Dimensions.font20),
+                          SizedBox(height: Dimensions.height10),
+                          Center(
+                            child: Visibility(
+                              visible: shouldShowExtendButton(),
+                              child: 
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (_orderList.isNotEmpty) {
+                                      final flag = _orderList[0].flag;
+                                      if (flag == 'T') {
+                                        Navigator.of(context).pushNamed('/table');
+                                      } else if (flag == 'C') {
+                                        Navigator.of(context).pushNamed('/conference');
+                                      }
+                                    }
+                                  },
+                                  
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.blueGrey, // Button background color
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10), // Button border radius
+                                    ),
+                                  ),
+                                  child: Text('Extend Time',style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 18,
+                                                    letterSpacing: 0.7)),
+                                )
+                            ),
+                          ),
                         ],
                       ),
                     ),

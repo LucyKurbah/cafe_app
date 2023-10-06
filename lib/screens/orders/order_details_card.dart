@@ -37,12 +37,13 @@ class OrderDetailsCard extends StatelessWidget {
                                 SizedBox(
                                   height: 110,
                                   width: 120,
-                                  child:
-                                        Image.network(
-                                            product.image,
-                                            fit: BoxFit.contain,
-                                            scale: 0.2,
-                                          )
+                                   child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
+                                    child: Image.network(
+                                      this.product.image,
+                                      fit: BoxFit.cover, // You can use 'cover' for aspect ratio preservation
+                                    ),
+                                  ),
                                 ),
                         ),
                         SizedBox(
@@ -58,11 +59,11 @@ class OrderDetailsCard extends StatelessWidget {
                                       BigText("₹ ${product.item_price}",textColor,Dimensions.font20),
                                     ],
                                   ),
-                                  SizedBox(height: Dimensions.height10,),
+                                  // SizedBox(height: Dimensions.height5,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                       SmallText("x ${product.quantity}",textColor,Dimensions.font17)
+                                       SmallText("x ${product.quantity}",greyColor,Dimensions.font17)
                                     ],
                                   ),
                                     SizedBox(height: Dimensions.height20,),

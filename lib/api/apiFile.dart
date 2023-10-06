@@ -17,7 +17,9 @@ class ApiConstants {
   //PROFILE 
   static String getProfileUrl = '$baseUrl/getProfile';
   static String saveProfileUrl = '$baseUrl/saveProfile';
+  static String uploadProfileUrl = '$baseUrl/uploadProfile';
   static String getIdDetailsUrl = '$baseUrl/getIdDetails';
+  static String deleteDocumentUrl = '$baseUrl/deleteDocument';
   //EVENTS
   static String getEventsUrl = '$baseUrl/getSliders';
   //MENU & ADD ON

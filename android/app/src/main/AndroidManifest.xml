@@ -2,6 +2,7 @@
     package="com.example.cafe_app">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
    <application
         android:label="cafe_app"
         android:name="${applicationName}"

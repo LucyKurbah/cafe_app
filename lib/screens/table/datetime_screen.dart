@@ -473,7 +473,7 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
       tableId, String timeFrom, String timeTo) async {
     ApiResponse response =
         await getTableDetails(tableId, timeFrom, timeTo, _date.text);
-    print("Check");
+
     if (response.error == null) {
       if (response.data != null) {
         if (response.data.toString() == "VE") {

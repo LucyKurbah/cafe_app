@@ -4,6 +4,7 @@ import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/fav_btn.dart';
 import 'package:cafe_app/models/Product.dart';
 import 'package:flutter/material.dart';
+import '../../../components/dimensions.dart';
 import '../../../constraints/constants.dart';
 
 class ProductCard extends StatelessWidget {
@@ -54,7 +55,7 @@ class ProductCard extends StatelessWidget {
                              
                       ),
               ),
-            const SizedBox(height: 10,),
+            SizedBox(height: Dimensions.height10,),
             Text(
               product.title,
               style: Theme.of(context)
@@ -66,7 +67,7 @@ class ProductCard extends StatelessWidget {
                product.desc,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(color: textColor),
             ),
-            const SizedBox(height: 20,),
+            SizedBox(height:  Dimensions.height20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

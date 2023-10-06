@@ -93,10 +93,13 @@ BigText(text, [color = Colors.white, size, overFlow = TextOverflow.ellipsis]) {
   return Text(
     text,
     overflow: overFlow,
-    style: TextStyle(
-        color: color,
-        fontWeight: FontWeight.w400,
-        fontSize: size == 0.0 ? Dimensions.font20 : size),
+    style: GoogleFonts.laila(
+          fontWeight: FontWeight.w400,
+        fontSize: size == 0.0 ? Dimensions.font17 : size,
+        color: textColor
+        ),
+        
+        
   );
 }
 
@@ -125,6 +128,8 @@ IconText(icon, iconColor, text, text_color) {
     ],
   );
 }
+
+
 
 Widget button(
     {required dynamic child,

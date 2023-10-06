@@ -12,7 +12,10 @@ Future<ApiResponse> getProfile() async {
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int userId = await getUserId();
-  try {
+
+  print("USER ID____________________________________________________________________");
+    print(userId);
+  try { 
     final response = await http.post(
       Uri.parse(ApiConstants.getProfileUrl),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
@@ -20,6 +23,7 @@ Future<ApiResponse> getProfile() async {
         'user_id': userId.toString(),
       },
     );
+    print(response.statusCode);
     switch (response.statusCode) {
       case 200:
         if (response.body == '305') {
@@ -52,7 +56,7 @@ Future<ApiResponse> getProfile() async {
   return apiResponse;
 }
 
-Future<ApiResponse> saveProfileDetailsApiCall(name,String? fileName,String? fileData, dropdownvalue) async {
+Future<ApiResponse> saveProfileDetailsApiCall(name, dropdownvalue) async {
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int userId = await getUserId();
@@ -65,12 +69,10 @@ Future<ApiResponse> saveProfileDetailsApiCall(name,String? fileName,String? file
       body: {
         'user_id': userId.toString(),
         'name' : name,
-        'data' : fileData,
-        'fileName': fileName,
         'document_id': dropdownvalue
       },
     );
-
+    print(response.statusCode);
     switch (response.statusCode) {
       case 200:
         if (response.body == '305') {
@@ -81,9 +83,10 @@ Future<ApiResponse> saveProfileDetailsApiCall(name,String? fileName,String? file
           apiResponse.error = ApiConstants.notLoggedIn;
         } else {
          
-          apiResponse.data = jsonDecode(response.body)
-              .map((p) => ProfileModel.fromJson(p))
-              .toList();
+          // apiResponse.data = jsonDecode(response.body)
+          //     .map((p) => ProfileModel.fromJson(p))
+          //     .toList();
+          apiResponse.data = 'Updated';
         }
         break;
       case 401:
@@ -98,35 +101,48 @@ Future<ApiResponse> saveProfileDetailsApiCall(name,String? fileName,String? file
   }
   return apiResponse;
 }
-Future<ApiResponse> uploadFileAndFields( String name, String? fileName,String? fileData) async {
-   int userId = await getUserId();
-   
- ApiResponse apiResponse = ApiResponse();
+
+Future<ApiResponse> uploadFile( String? fileName,String? fileData) async {
+  ApiResponse apiResponse = ApiResponse();
+  String token = await getToken();
+  int userId = await getUserId();
   try {
-    // Create a new multipart request
-    var request = http.MultipartRequest('POST', Uri.parse(ApiConstants.saveProfileUrl));
-
-    // Add file to the request
    
-    // Add form fields to the request
-    // request.fields['name'] = name;
-    // request.fields['user_id'] = userId.toString() ;
+    final response = await http.post(
+      Uri.parse(ApiConstants.uploadProfileUrl),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: {
+        'user_id': userId.toString(),
+        'data' : fileData,
+        'fileName': fileName,
+      },
+    );
 
-    // Send the request and get the response
-    var response = await request.send();
-
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      
-       apiResponse.error= 'File upload success';
-    } else    {
-      // File upload failed
-      apiResponse.error=('File upload failed with status code ${response.statusCode}');
+    switch (response.statusCode) {
+      case 200:
+        if (response.body == '305') {
+          apiResponse.data = '';
+        } else if (response.body == 'X') {
+          apiResponse.error = ApiConstants.notLoggedIn;
+        } else if (response.body == '500') {
+          apiResponse.error = ApiConstants.notLoggedIn;
+        } else {
+         
+          // apiResponse.data = jsonDecode(response.body)
+          //     .map((p) => ProfileModel.fromJson(p))
+          //     .toList();
+          apiResponse.data = 'Updated';
+        }
+        break;
+      case 401:
+        apiResponse.error = ApiConstants.unauthorized;
+        break;
+      default:
+        apiResponse.error = response.statusCode.toString();
+        break;
     }
-    
   } catch (e) {
-
-     apiResponse.error = e.toString();
+    apiResponse.error = e.toString();
   }
   return apiResponse;
 }
@@ -150,6 +166,43 @@ Future<ApiResponse> getIDList() async{
         break;
       case 401:
         apiResponse.error = ApiConstants.unauthorized;
+        break;
+      default:
+         apiResponse.error = response.statusCode.toString();
+        break;
+    }
+  } catch (e) {
+     apiResponse.error =e.toString();
+  }
+  return apiResponse;
+}
+
+Future<ApiResponse> deleteDocument() async{
+  
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    String token = await getToken();
+    int user_id = await getUserId();
+    final response = await http.post(Uri.parse(ApiConstants.deleteDocumentUrl),
+                headers: {
+                    'Accept' : 'application/json',
+                    'Authorization' : 'Bearer $token'
+                },
+                body: {
+                  'user_id' : user_id.toString(),
+                }
+               );
+    print(response.statusCode);
+    switch(response.statusCode)
+    {
+      case 200:
+        apiResponse.data =  response.body;
+        break;
+      case 401:
+        apiResponse.error = ApiConstants.unauthorized;
+        break;
+      case 404:
+        apiResponse.error = response.statusCode.toString();
         break;
       default:
          apiResponse.error = response.statusCode.toString();
