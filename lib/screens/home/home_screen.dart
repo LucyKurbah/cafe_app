@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 import '../orders/my_orders.dart';
-import '../profile/profile.dart';
+import '../profile/profile_old.dart';
 
 
 class HomeScreen extends StatefulWidget {

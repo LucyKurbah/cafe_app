@@ -21,9 +21,11 @@ class _OnboardScreenState extends State<OnboardScreen> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
+      backgroundColor: mainColor,
         body: Stack(
           children: [
             PageView(
+              
                 controller: controller,
                 onPageChanged: (index) {
                   setState(() => isLastPage = index == 2);
@@ -35,21 +37,25 @@ class _OnboardScreenState extends State<OnboardScreen> {
                 ],
           ),
           Container(
-            alignment: Alignment(0,0.75),
+            alignment: Alignment(0,0.9),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
                       onPressed: () => controller.jumpToPage(2),
                       
-                      child: const Text('SKIP')),
+                      child: const Text('SKIP',style: TextStyle(fontSize: 20)), ),
                 SmoothPageIndicator(
                             controller: controller,
                             count: 3,
                             effect: WormEffect(
                                 spacing: 16,
-                                dotColor: Colors.black26,
-                                activeDotColor: iconColors1),
+                                dotColor: greyColor,
+                                dotWidth: 10,
+                                dotHeight: 10,
+                                activeDotColor: iconColors1,
+                                
+                                ),
                             onDotClicked: (index) => controller.animateToPage(index,
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut),
@@ -62,13 +68,24 @@ class _OnboardScreenState extends State<OnboardScreen> {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const SplashScreen()));
                       },
-                      child: const Text('DONE')
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          // color: Colors.blue,
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                        child: const Text('DONE',
+                                    style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.grey
+                                    )),
+                      )
                 ):
                 TextButton(
                       onPressed: () => controller.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut),
-                      child: const Text('NEXT')
+                      child: const Text('NEXT',style: TextStyle(fontSize: 20))
                 ),
               ],
             ),

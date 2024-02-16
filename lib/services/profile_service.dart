@@ -5,7 +5,7 @@ import 'package:cafe_app/services/user_service.dart';
 import 'package:http/http.dart' as http;
 import '../api/apiFile.dart';
 import '../models/ProfileModel.dart';
-import '../screens/profile/profile.dart';
+import '../screens/profile/profile_old.dart';
 import 'api_response.dart';
 
 Future<ApiResponse> getProfile() async {

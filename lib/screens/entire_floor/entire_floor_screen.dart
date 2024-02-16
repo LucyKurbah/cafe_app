@@ -248,12 +248,14 @@ class _EntireFloorScreenState extends State<EntireFloorScreen> {
                                       ),
                                       readOnly: true,
                                       onTap: () async {
+                                        
+                                        DateTime currentDate = DateTime.now();
                                         DateTime? pickeddate =
                                             await showDatePicker(
                                                 context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime.now(),
-                                                lastDate: DateTime(2024));
+                                                initialDate: currentDate,
+                                                firstDate: currentDate,
+                                                lastDate: currentDate.add(Duration(days: 365)));
                                         if (pickeddate != null) {
                                           setState(() {
                                             _date.text =

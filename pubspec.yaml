@@ -63,6 +63,7 @@ dependencies:
   # internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^4.0.2
   smooth_page_indicator: ^1.1.0
+  lottie: ^2.6.0
  
   # image_cropper: ^5.0.0
   # image_picker: ^1.0.1
@@ -106,7 +107,8 @@ flutter:
     - Assets/icons/heart.svg
     - Assets/main/
     - Assets/events/
-    - Assets/lottie/laptop.gif
+    - Assets/lottie/
+    - Assets/lottie/laptop.json
 
 
 

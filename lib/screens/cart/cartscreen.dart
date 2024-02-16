@@ -138,7 +138,10 @@ class _CartScreenState extends State<CartScreen> {
   Future<bool> _makePaymentAPI() async {
     ApiResponse response = await makePayment();
     try {
+      print(response.data);
+      print("response.error");
       if (response.error == null) {
+        print("NULL ERROR__________________");
         if (response.data == 200) {
           showSnackBar(title: 'Payment Done', message: '');
           setState(() {
@@ -152,7 +155,8 @@ class _CartScreenState extends State<CartScreen> {
           return false;
         }
       } else {
-        return false;
+        // return false;
+        throw Exception("API response error: ${response.error}");
       }
     } catch (e) {
       throw Exception(e.toString());

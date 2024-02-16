@@ -11,7 +11,7 @@ import '../orders/my_orders.dart';
 import 'event_body.dart';
 import 'home_card.dart';
 import '../user/login.dart';
-import '../profile/profile.dart';
+import '../profile/profile_old.dart';
 import 'package:cafe_app/services/user_service.dart';
 import 'package:get/get.dart';
 

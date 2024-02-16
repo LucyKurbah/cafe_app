@@ -20,16 +20,17 @@ class _LoadingState extends State<Loading> {
     Future.delayed(const Duration(milliseconds: 500), () {
       _loadUserInfo();
     });
+    //  _loadUserInfo();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
+      // height: MediaQuery.of(context).size.height,
+      // child: const Center(
+      //   child: CircularProgressIndicator(),
+      // ),
     );
   }
 }

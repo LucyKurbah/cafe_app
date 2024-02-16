@@ -519,20 +519,24 @@ Future<ApiResponse> makePayment() async {
                         'user_id': userId.toString(),
                     },   
                );
-   
+
     if (response.statusCode == 200) {
-      if(response.body == "Y")
+      if(response.body == '200')
       {
-        apiResponse.data =200; //Payment successful
+         print(response.body);
+        apiResponse.data = 200; //Payment successful
       }
       else {
+         print("Payment failed");
         apiResponse.error ="Payment failed";
-    }
+      }
       
     } else {
-      apiResponse.error ="Payment failed";
+        apiResponse.error ="Payment failed";
+        print(apiResponse.error );
       // throw Exception("Payment failed");
     }
+    print(apiResponse.data);
     return apiResponse;
   } catch (e) {
     // Handle the error

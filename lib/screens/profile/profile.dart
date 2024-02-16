@@ -5,6 +5,7 @@ import 'package:cafe_app/components/dimensions.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:cafe_app/widgets/top_custom_shape.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import '../../api/apiFile.dart';
 import '../../components/profile_skelton.dart';
@@ -18,13 +19,16 @@ import '../home/home_screen.dart';
 import '../user/login.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final AnimationController animationController;
+  const Profile({super.key, required this.animationController});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+
+ 
   List<dynamic> _profileInfo = [].obs;
   bool _isLoading = true;
   List<dynamic> _idList = [].obs;
@@ -41,6 +45,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
+
+    widget.animationController.forward();
     Future.delayed(const Duration(milliseconds: 10), () {
       setState(() {
         _isLoading = true;
@@ -166,251 +172,12 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainColor,
-      appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: mainColor,
-          title: Text(
-            "My Profile",
-            style: TextStyle(color: textColor),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (ctx) => const HomeScreen()));
-            },
-            icon: const Icon(Icons.arrow_back),
-            color: textColor,
-          )),
-      body: _isLoading // show loading spinner if data is loading
-          ? ListView.separated(
-              itemCount: 1,
-              itemBuilder: (context, index) => const ProfileSkelton(),
-              separatorBuilder: (context, index) => const SizedBox(height: 20),
-            )
-          : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TopCustomShape(profileInfo: _profileInfo[0]),
-                  SizedBox(
-                    height: Dimensions.height20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // ReadOnlyTextField(
-                              //   label: 'Name',
-                              //   defaultText: _nameController.text,
-                              //   enable: true,
-                              // ),
-                              TextField(
-                                    controller: _nameController,
-                                    style:  TextStyle(
-                                      color: textColor,
-                                    ),
-                                    decoration: InputDecoration(
-                                      labelText: "Name",
-                                      labelStyle: TextStyle(color: textColor),
-                                      border:  OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: greyColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(8.0),
-                                          bottomRight: Radius.circular(8.0),
-                                        ),
-                                      ),
-                                      enabledBorder:  OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: greyColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(8.0),
-                                          bottomRight: Radius.circular(8.0),
-                                        ),
-                                      ),
-                                      disabledBorder:  OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: greyColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(8.0),
-                                          bottomRight: Radius.circular(8.0),
-                                        ),
-                                      ),
-                                      focusedBorder:  OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: blueColor,
-                                          width: 2.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(8.0),
-                                          bottomRight: Radius.circular(8.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                                                SizedBox(
-                                height: Dimensions.height10,
-                              ),
-                              ReadOnlyTextField(
-                                label: 'Email',
-                                defaultText: '${_profileInfo[0].email}',
-                                enable: false,
-                                // controller: _emailController
-                              ),
-                              SizedBox(
-                                height: Dimensions.height10,
-                              ),
-                              ReadOnlyTextField(
-                                label: 'Phone Number',
-                                defaultText: '${_profileInfo[0].phone_no}',
-                                enable: false,
-                                //controller: _phoneController
-                              ),
-                              
-                              SizedBox(height: Dimensions.height20),
-                              Text(
-                                'Upload ID:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: textColor),
-                              ),
-                             
-                              SizedBox(height: Dimensions.height10),
-                             
-                              DropdownButton<String>(
-                                    value: dropdownvalue,
-                                    icon: const Icon(Icons.keyboard_arrow_down),
-                                    items: [
-                                      const DropdownMenuItem<String>(
-                                        value: "0",
-                                        child: Text("Select ID"),
-                                      ),
-                                      ..._idList.map((floor) {
-                                        // print(floor.id.toString());
-                                        return DropdownMenuItem<String>(
-                                          value: floor.id.toString(),
-                                          child: Text(floor.document_name),
-                                        );
-                                      }).toList(),
-                                    ],
-                                    onChanged: (String? newValue) {
-
-                                      setState(() {
-                                        dropdownvalue = newValue!;
-                                        if (newValue == "0") {
-                                         
-                                          f_id = 0; // Set the  ID to null or any other default value
-                                        } else {
-                                          for (var id in _idList) {
-                                            if (id.id.toString() ==
-                                                newValue) {
-                                            
-                                              f_id = id.id;//int.parse(newValue.substring(1));
-                                            }
-                                          }
-                                        }
-                                      });
-                                    },
-                                    style: TextStyle(color: textColor),
-                                    dropdownColor: greyColor7,
-                                    underline: Container(
-                                      height: 1,
-                                      color: textColor,
-                                    ),
-                                    isExpanded: true,
-                                    hint: Text(
-                                      dropdownvalue ?? 'Select ID',
-                                      style: TextStyle(color: textColor),
-                                ),
-                              )  ,
-                              SizedBox(height: Dimensions.height20),
-                              _profileInfo[0].doc_image != "" ? 
-                              Column(
-                                        children: [
-                                          Text(
-                                            'Uploaded Document:',
-                                            style: TextStyle(fontSize: 13, color: textColor),
-                                          ),
-                                          SizedBox(height: 10),
-                                          Stack(
-                                            alignment: Alignment.bottomRight,
-                                            children: [
-                                              Image.network(
-                                                '${ _profileInfo[0].doc_image }',
-                                                width: MediaQuery.sizeOf(context).width,
-                                                height: 150,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  // IconButton(
-                                                  //   onPressed: _pickFile,
-                                                  //   icon: Icon(Icons.edit),
-                                                  // ),
-                                                  IconButton(
-                                                    onPressed: _deleteFile,
-                                                    icon: Icon(Icons.delete),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                              :
-                              TextButton.icon(
-                                onPressed: _pickFile,
-                                icon: const Icon(Icons.upload_file),
-                                label: _file != null
-                                    ? Text(_fileName ?? '')
-                                    : const Text('Select file'),
-                              ),
-                              // _file != null ?
-                              // Container(
-                              //       height: 200,
-                              //       width: MediaQuery.of(context).size.width, // Set your desired height here
-                              //       child: _file != null
-                              //           ? Image.file(
-                              //               _file!,
-                              //               fit: BoxFit.cover,
-                              //             )
-                              //           : Text("File not Chosen"),
-                              //     ): Text(""),
-                              SizedBox(height: Dimensions.height15),
-                                    Center(
-                                      child: ElevatedButton(
-                                        onPressed: _saveProfile,
-                                        child: const Text('Save Profile'),
-                                      ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+     
     );
   }
 }

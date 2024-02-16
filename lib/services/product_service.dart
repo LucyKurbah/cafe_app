@@ -8,7 +8,7 @@ import 'api_response.dart';
 
 Future<ApiResponse> getProducts() async{
   // String token = await getToken();
-    int userId = await getUserId();print(userId);
+  int userId = await getUserId();print(userId);
   ApiResponse apiResponse = ApiResponse();
   try {
         final response = await http.post(Uri.parse(ApiConstants.itemUrl),
