@@ -1,23 +1,29 @@
-import 'package:cafe_app/components/colors.dart';
+
+import 'package:cafe_app/notification_services.dart';
 import 'package:cafe_app/screens/onboard/onboard_screen.dart';
 import 'package:cafe_app/screens/orders/my_orders.dart';
 import 'package:cafe_app/screens/splash/splash_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cafe_app/screens/menu/menu.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'components/colors.dart';
 import 'controllers/dependency_injection.dart';
 import 'controllers/home_controller.dart';
 import 'screens/table/table_page.dart';
 import 'screens/cart/cartscreen.dart';
 import 'screens/conference/conference_screen.dart';
-import 'screens/home/loading.dart';
+
 import 'package:get/get.dart';
 import 'screens/user/login.dart';
 import 'screens/user/register.dart';
+
+
+
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', //id
@@ -34,8 +40,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
+
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    // options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
@@ -64,11 +74,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _counter = 0;
+  NotificationServices notificationServices = NotificationServices();
   
+
   @override
   void initState() {
     super.initState();
+    // notificationServices.requestNotificationPermission();
     saveDeviceTokenIdToSharedPreferences();
+    
     FirebaseMessaging.instance.getInitialMessage();
     //Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -160,7 +174,6 @@ class _MyAppState extends State<MyApp> {
             '/signup': (context) => const Register(),
             '/orders': (context) => const MyOrders(),
           },
-          
         );
       }),
     );

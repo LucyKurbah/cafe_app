@@ -28,6 +28,7 @@ class _EventBodyState extends State<EventBody> {
   @override
   void initState() {
     super.initState();
+            print("_____________________________________________)))))))(((((**)))_____+++++++++===========================================))");
     retrieveEvents();
     pageController.addListener(() {
       setState(() {
@@ -37,10 +38,13 @@ class _EventBodyState extends State<EventBody> {
   }
 
   Future<void> retrieveEvents() async {
+    print("_____________________________________________)HELLO===========================================))");
     ApiResponse response = await getEvents();
+     
     if (response.error == null) {
       setState(() {
         _eventsList = response.data as List<dynamic>;
+        print("_____________________________________________)))))))(((((**)))_____+++++++++===========================================))");
         print("EventList Length");
         dotCount = _eventsList.length;
         print(dotCount);

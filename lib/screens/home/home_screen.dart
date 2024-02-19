@@ -1,4 +1,5 @@
 import 'package:cafe_app/components/colors.dart';
+import 'package:cafe_app/notification_services.dart';
 
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 import '../orders/my_orders.dart';
-import '../profile/profile_old.dart';
+import '../profile/profile.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +24,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
    const MyOrders(),
    const Profile(),
   ];
+  NotificationServices notificationServices = NotificationServices();
+
+  @override
+  void initState(){
+    super.initState();
+    notificationServices.getDeviceToken().then((value){
+      print(value);
+      print("DEVICE TOKEN");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

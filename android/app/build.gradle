@@ -1,6 +1,5 @@
 def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.flutter.minSdkVersion=21
-flutter.compileSdkVersion=33')
+def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
@@ -84,6 +83,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics'
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
    
 }
 

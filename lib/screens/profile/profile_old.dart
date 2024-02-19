@@ -17,14 +17,14 @@ import 'package:path/path.dart' as path;
 import '../home/home_screen.dart';
 import '../user/login.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class ProfileOld extends StatefulWidget {
+  const ProfileOld({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileOld> createState() => _ProfileOldState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileOldState extends State<ProfileOld> {
   List<dynamic> _profileInfo = [].obs;
   bool _isLoading = true;
   List<dynamic> _idList = [].obs;
