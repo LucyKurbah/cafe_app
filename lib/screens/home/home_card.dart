@@ -38,7 +38,7 @@ class _HomeCardState extends State<HomeCard> {
   ];
 
   List<Widget> myWidgets = [
-    const TablePage(),
+     TablePage(),
     const ConferenceScreen(),
     const MenuPage(),
     const EntireFloorScreen(),

@@ -10,7 +10,7 @@ Future<ApiResponse> getEvents() async{
   try {
         print(ApiConstants.getEventsUrl);
         final response = await http.post(Uri.parse(ApiConstants.getEventsUrl),headers: {'Accept' : 'application/json',});
-        print("_____________________________________________)HELLO===========================================))");
+        print("_____________________________________________)INSIDE===========================================))");
         switch(response.statusCode)
         {
           case 200:

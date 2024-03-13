@@ -6,7 +6,6 @@ import 'package:cafe_app/screens/splash/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cafe_app/screens/menu/menu.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +16,9 @@ import 'controllers/home_controller.dart';
 import 'screens/table/table_page.dart';
 import 'screens/cart/cartscreen.dart';
 import 'screens/conference/conference_screen.dart';
-
 import 'package:get/get.dart';
 import 'screens/user/login.dart';
 import 'screens/user/register.dart';
-
-
-
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', //id
@@ -41,13 +36,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
 
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     // options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -75,7 +70,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _counter = 0;
   NotificationServices notificationServices = NotificationServices();
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
   
+  // @pragma('vm:entry-point')
+  // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //   // If you're going to use other Firebase services in the background, such as Firestore,
+  //   // make sure you call `initializeApp` before using other Firebase services.
+  //   await Firebase.initializeApp();
+  //   print("Handling a background message: ${message.messageId}");
+  // }
+
 
   @override
   void initState() {
@@ -84,6 +88,7 @@ class _MyAppState extends State<MyApp> {
     saveDeviceTokenIdToSharedPreferences();
     
     FirebaseMessaging.instance.getInitialMessage();
+    // notificationServices.firebaseInit();
     //Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -124,10 +129,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> saveDeviceTokenIdToSharedPreferences() async {
-    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+    isTokenRefresh();
     String? deviceTokenId = await messaging.getToken();
     print("DEVICE TOKEN ID IS");
     print(deviceTokenId);
+  }
+
+  void isTokenRefresh() async {
+        messaging.onTokenRefresh.listen((event){
+          event.toString();
+        });
+        print("DEVICE TOKEN REFRESHED");
+    
   }
 
   void incrementCounter() {
@@ -163,7 +176,7 @@ class _MyAppState extends State<MyApp> {
           title: 'Cafe App',
           home: widget.showHome ? const SplashScreen() : const OnboardScreen(),
           routes: {
-            '/table': (context) => const TablePage(),
+            '/table': (context) =>  TablePage(),
             '/conference': (context) => const ConferenceScreen(),
             '/coffee': (context) => const MenuPage(),
             '/floor': (context) => const MenuPage(),

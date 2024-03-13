@@ -202,15 +202,15 @@ class _MenuPageState extends State<MenuPage>
                                     // indicator: CircleTabIndicator(color: Color(0xffd17842), radius: 4),
                                     indicator:  UnderlineTabIndicator(
                                         borderSide: BorderSide(
-                                            width: 3, color: iconColors1),
+                                            width: 3, color: redColor),
                                         insets:const EdgeInsets.symmetric(
                                             horizontal: 16)),
-                                    labelColor: iconColors1,
+                                    labelColor: greyColor,
                                     labelStyle: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16),
                                     unselectedLabelColor:
-                                        textColor.withOpacity(0.5),
+                                        textColor.withOpacity(0.3),
                                     tabs: const [
                                       Tab(
                                         text: "Food Items",

@@ -21,3 +21,4 @@ var signColor = const Color(0xFFa9a29f);
 var titleColor = const Color(0xFF5c524f);
 var grey9Button = const Color.fromARGB(255, 50, 54, 56);
 var transparentColor = Colors.transparent;
+var redColor = Color.fromARGB(255, 163, 38, 29);

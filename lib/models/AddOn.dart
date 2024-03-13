@@ -1,11 +1,11 @@
 class AddOn{
     
-    int? id, quantity;
-    late String title, image, desc;
-    late double price;
+  int? id, quantity;
+  late String title, image, desc;
+  late double price;
 
 
-    AddOn({this.quantity,required this.title, required this.image, required this.price, required this.id, required this.desc});
+  AddOn({this.quantity,required this.title, required this.image, required this.price, required this.id, required this.desc});
 
   factory AddOn.fromJson(Map<String, dynamic> json){
 

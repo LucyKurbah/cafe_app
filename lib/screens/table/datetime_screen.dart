@@ -61,6 +61,7 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
 
     setState(() {
       _selectedtimeTo.text = formattedTime;
+      
       calculateHours(_selectedtimeFrom.text, formattedTime);
       checkDateTimeAvailability(
           widget.table.id, _selectedtimeFrom.text, formattedTime);
@@ -264,6 +265,7 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
                                                   String formattedTime =
                                                       DateFormat('h:mm a')
                                                           .format(parsedTime);
+                                                         
 
                                                   setState(() {
                                                     _selectedtimeFrom.text =
@@ -473,7 +475,7 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
   }
 
   void checkDateTimeAvailability(
-      tableId, String timeFrom, String timeTo) async {
+    tableId, String timeFrom, String timeTo) async {
     ApiResponse response =
         await getTableDetails(tableId, timeFrom, timeTo, _date.text);
 

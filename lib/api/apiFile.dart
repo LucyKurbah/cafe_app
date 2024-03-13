@@ -1,6 +1,7 @@
 class ApiConstants {
   static String aws_ip= "13.231.134.208";
-  static String office_ip="10.179.2.187:8000";
+  static String office_ip="10.179.2.187:8001";
+  static String bran_office_ip="10.179.28.63:8001";
   static String home_ip="192.168.29.48:8000";
   static String bran_ip="192.168.1.51:8000";
 
@@ -22,12 +23,16 @@ class ApiConstants {
   static String deleteDocumentUrl = '$baseUrl/deleteDocument';
   //EVENTS
   static String getEventsUrl = '$baseUrl/getSliders';
+  //POPUP ON APP LAUNCH
+ static String getPopUpsUrl = '$baseUrl/getPopUps';
   //MENU & ADD ON
   static String itemUrl = '$baseUrl/getFoodItems';
   static String getAddOnUrl = '$baseUrl/getItems';
   //TABLE
   static String tableUrl = '$baseUrl/getTables';
+  static String availableTablesUrl = '$baseUrl/getAvailableTables';
   static String getTableDetailsUrl = '$baseUrl/validateTable';
+  static String getTableDateTimeDetailsUrl = '$baseUrl/validateTableDateTime';
   //CONFERENCE
   static String getConferenceDetailsUrl = '$baseUrl/getConferenceDetails';
   static String checkConferenceDetailsUrl = '$baseUrl/checkConferenceDetails';
@@ -53,4 +58,5 @@ class ApiConstants {
   static String unauthorized = 'Unauthorized';
   static String somethingWentWrong = 'Something went wrong';
   static String notLoggedIn = 'Please log in first!';
+   static String noTable = 'No Table available for the date and time!';
 }

@@ -25,7 +25,6 @@ class _OnboardScreenState extends State<OnboardScreen> {
         body: Stack(
           children: [
             PageView(
-              
                 controller: controller,
                 onPageChanged: (index) {
                   setState(() => isLastPage = index == 2);

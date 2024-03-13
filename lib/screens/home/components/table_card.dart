@@ -4,6 +4,7 @@ import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/models/Table.dart';
 import 'package:flutter/material.dart';
 import '../../../constraints/constants.dart';
+import 'package:cafe_app/components/fav_btn.dart';
 
 class TableCard extends StatelessWidget {
 
@@ -41,12 +42,12 @@ class TableCard extends StatelessWidget {
               child:
                     Image.network(
                        table.image,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                         scale: 0.4,
                       )
                    
             ),
-            SizedBox(height: Dimensions.height10,),
+            SizedBox(height: Dimensions.height5,),
             Text(
               table.table_name,
               style: Theme.of(context)
@@ -57,20 +58,24 @@ class TableCard extends StatelessWidget {
             SizedBox(height: Dimensions.height5,),
             Text(
                '${table.table_seats} seats',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: textColor),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: greyColor),
             ),
-             SizedBox(height: Dimensions.height20,),
+            SizedBox(height: Dimensions.height5,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("₹ ${table.price}",
+                Text("₹ ${table.price} /hr",
                  style: Theme.of(context)
                   .textTheme
                   .titleMedium!
-                  .copyWith(fontWeight: FontWeight.w600, color: textColor),),
-                // const FavBtn(),
+                  .copyWith(fontWeight: FontWeight.w600, color: textColor, fontSize: 14),),
+                // Text("Add", style: TextStyle(color: textColor),),
+                Spacer(), // Add Spacer to push the FavBtn to the right
+                FavBtn(), 
               ],
-            )
+              
+            ),
+           
           ],
         ),
       ),

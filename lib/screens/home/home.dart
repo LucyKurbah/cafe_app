@@ -2,6 +2,7 @@ import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/screens/cart/cartscreen.dart';
 import 'package:cafe_app/screens/faq/faq_screen.dart';
 import 'package:cafe_app/screens/home/home_screen.dart';
+import 'package:cafe_app/screens/terms/terms.dart';
 import 'package:flutter/material.dart';
 import '../../components/dimensions.dart';
 import '../../models/user_model.dart';
@@ -202,7 +203,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ListTile(
                   onTap: () {
 
-                    Get.to(() =>const  Profile(),
+                    Get.to(() =>const  Terms(),
                         transition: Transition.rightToLeftWithFade);
                   },
                   leading: Icon(

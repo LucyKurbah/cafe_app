@@ -70,13 +70,13 @@ class AddOnCard extends StatelessWidget {
                     const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: iconColors1),
+                    color: redColor),
                 child: 
                 // product.quantity == null || product.quantity == 0    
                 //     ? 
                     InkWell(
                         onTap: addItem,
-                        child: Text("Add", style: TextStyle(color: textColor)),
+                        child: Text("Add",style: TextStyle(color: textColor, fontSize: 12),),
                       )
                     // : 
                     // Row(
