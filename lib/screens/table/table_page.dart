@@ -1,5 +1,7 @@
 import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/controllers/home_controller.dart';
+import 'package:cafe_app/main.dart';
+import 'package:cafe_app/screens/home/components/book_table.dart';
 import 'package:cafe_app/screens/home/components/table_card.dart';
 import 'package:cafe_app/screens/user/login.dart';
 import 'package:cafe_app/services/table_service.dart';
@@ -13,9 +15,9 @@ import 'package:cafe_app/api/apiFile.dart';
 import 'package:cafe_app/models/Product.dart';
 import 'package:cafe_app/screens/table/single_table_screen.dart';
 import 'package:get/get.dart';
-
 import '../../models/Table.dart';
 import '../../widgets/custom_widgets.dart';
+import '../menu/menu.dart';
 
 class TablePage extends StatefulWidget {
   TablePage({super.key});
@@ -59,6 +61,11 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
   bool checkTable = false;
   String t_date = '';
 
+  int tapped = 0;
+  TableModel? selectedProduct; 
+  List<int> selectedTables = [];
+  List<TableModel> tablesToAdd = [];
+
   void _updateSecondTimePicker(TimeOfDay newTime) {
     if (timeFrom != null && newTime != null && newTime.hour < timeFrom!.hour) {
       showSnackBar(
@@ -83,6 +90,26 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
       // calculateHours(_selectedtimeFrom.text, formattedTime);
       // checkDateTimeAvailability(_selectedtimeFrom.text, formattedTime);
     });
+  }
+
+  void _showBookNowSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Book ',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.white,
+        duration: Duration(days: 1), // Set duration to a long time
+        action: SnackBarAction(
+          label: 'Book',
+          onPressed: () {
+            // Handle booking action here
+          },
+        ),
+      ),
+    );
   }
 
   convertTimeToPostgres(time, bookDate) {
@@ -188,8 +215,52 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> addTableCart( String date,String timeFrom, String timeTo, List<int> selectedTables, String hours) async {
+    userId = await getUserId();
+    DateTime time_from = DateFormat('h:mm a').parse(timeFrom);
+    DateTime time_to = DateFormat('h:mm a').parse(timeTo);
+    String bookDate = convertTimeToPostgres(timeFrom, date);
+
+    ApiResponse response = await addTableToCart(
+        bookDate, time_from.toString(), time_to.toString(), selectedTables, hours);
+
+    if (response.error == null) {
+      if (response.data == 200) {
+        setState(() {
+          _cartMessage = "Table added to Cart";
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_cartMessage)));
+          _loading = _loading ? !_loading : _loading;
+          ScaffoldMessenger.of(context).showSnackBar(
+              snackBarText(title: '', message: "Table added to Cart"));
+
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) =>  MenuPage()),
+              (route) => false);
+        });
+      } else if (response.data == "X") {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Table is not available for the selected time")));
+      } else if (response.data == 350) {
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text("Table already in cart")));
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarText(title: 'error', message: "Table already in cart"));
+      }
+    } else if (response.error == ApiConstants.unauthorized) {
+      logoutUser();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const Login()),
+          (route) => false);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("${response.error}")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
         backgroundColor: greyColor9,
         appBar: AppBar(
@@ -287,9 +358,8 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                         data: ThemeData.light()
                                                             .copyWith(
                                                           primaryColor:
-                                                              redColor, // Change this to your desired color
-                                                          hintColor:
-                                                              redColor, // Change this to your desired color
+                                                              redColor,
+                                                          hintColor: redColor,
                                                           colorScheme:
                                                               ColorScheme.light(
                                                                   primary:
@@ -307,11 +377,14 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                   );
                                                   if (pickeddate != null) {
                                                     setState(() {
-                                                      selectedDate = pickeddate;
                                                       _date.text = DateFormat(
                                                               'dd-MM-yyyy')
-                                                          .format(selectedDate);
-                                                      // Update your logic here if needed
+                                                          .format(pickeddate);
+                                                      t_date = DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(pickeddate);
+                                                      print(_date.text);
+                                                      print(t_date);
                                                     });
                                                   }
                                                 },
@@ -340,8 +413,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                     focusedBorder:
                                                         UnderlineInputBorder(
                                                       borderSide: BorderSide(
-                                                          color:
-                                                              textColor), // Change this to your desired color
+                                                          color: textColor),
                                                     ),
                                                     labelText: "From",
                                                     labelStyle: TextStyle(
@@ -366,16 +438,15 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                               style: TextButton
                                                                   .styleFrom(
                                                                 foregroundColor:
-                                                                    redColor, // Change this to your desired color
+                                                                    redColor,
                                                               ),
                                                             ),
                                                             colorScheme:
                                                                 ColorScheme
                                                                     .light(
-                                                              primary:
-                                                                  redColor, // Hour text color
-                                                              onPrimary: Colors
-                                                                  .white, // AM/PM text color
+                                                              primary: redColor,
+                                                              onPrimary:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                           child: MediaQuery(
@@ -433,8 +504,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                     focusedBorder:
                                                         UnderlineInputBorder(
                                                       borderSide: BorderSide(
-                                                          color:
-                                                              textColor), // Change this to your desired color
+                                                          color: textColor),
                                                     ),
                                                     labelText: "To",
                                                     labelStyle: TextStyle(
@@ -459,16 +529,15 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                               style: TextButton
                                                                   .styleFrom(
                                                                 foregroundColor:
-                                                                    redColor, // Change this to your desired color
+                                                                    redColor,
                                                               ),
                                                             ),
                                                             colorScheme:
                                                                 ColorScheme
                                                                     .light(
-                                                              primary:
-                                                                  redColor, // Hour text color
-                                                              onPrimary: Colors
-                                                                  .white, // AM/PM text color
+                                                              primary: redColor,
+                                                              onPrimary:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                           child: MediaQuery(
@@ -527,17 +596,18 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                             checkDateTimeAvailability(
                                                 _selectedtimeFrom.text,
                                                 _selectedtimeTo.text);
-                                            calculateHours(_selectedtimeFrom.text, _selectedtimeTo.text);
-                                          
+                                            calculateHours(
+                                                _selectedtimeFrom.text,
+                                                _selectedtimeTo.text);
                                           },
                                         ),
-                                        if(noOfHours.text.isNotEmpty)
-                                              Text("$hours hour/s",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w300,
-                                                    color: textColor.withOpacity(0.8)))
-                                              ,
+                                        if (noOfHours.text.isNotEmpty)
+                                          Text("$hours hour/s",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: textColor
+                                                      .withOpacity(0.8))),
                                         if (checkTable)
                                           Row(
                                             children: [
@@ -545,12 +615,82 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 8.0),
-                                                child: Text(
-                                                  "Available tables",
-                                                  style: TextStyle(
-                                                    color: greyColor6,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            greyColor8, // Color for unavailable tables
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        width:
+                                                            5), // Adjust spacing
+                                                    Text(
+                                                      "Unvailable",
+                                                      style: TextStyle(
+                                                        color: greyColor6,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            greyColor, // Color for unavailable tables
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        width:
+                                                            5), // Adjust spacing
+                                                    Text(
+                                                      "Available",
+                                                      style: TextStyle(
+                                                        color: greyColor6,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            28,
+                                                            126,
+                                                            116), // Color for unavailable tables
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        width:
+                                                            5), // Adjust spacing
+                                                    Text(
+                                                      "Selected",
+                                                      style: TextStyle(
+                                                        color: greyColor6,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                               SizedBox(height: 10),
@@ -566,7 +706,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                     : -(constraints.maxHeight - 100 * 2 - 85),
                                 left: 0,
                                 right: 0,
-                                height: constraints.maxHeight - 230,
+                                height: constraints.maxHeight - 270,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
@@ -582,24 +722,130 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
-                                      childAspectRatio: 0.8,
-                                      mainAxisSpacing: 20,
-                                      crossAxisSpacing: 20,
+                                      childAspectRatio: 1.7, //0.8
+                                      mainAxisSpacing: 50, //20
+                                      crossAxisSpacing: 50, //20
                                     ),
-                                    itemBuilder: (context, index) => TableCard(
-                                        table: _productList[index],
-                                        press: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: ((context) =>
-                                          //             SingleTableScreen(
-                                          //                 _productList[
-                                          //                     index]))));
-                                        }),
+                                    itemBuilder: (context, index) => BookTable(
+                                      table: _productList[index],
+                                      press: (bool pressed, int val) {
+
+                                        setState(() {
+                                          if (pressed == true && val != 1) {
+                                            tapped = tapped + 1;
+                                            selectedProduct = _productList[index];
+                                            selectedTables.add(_productList[index].id);
+
+                                            if (tapped == 1) {
+                                              // _showBookNowSnackbar(context);
+                                            }
+                                          } else if (pressed == false && val != 1) {
+                                            tapped = tapped - 1;
+                                             selectedTables.remove(_productList[index].id); 
+                                             
+                                            if (tapped == 0) {
+                                              ScaffoldMessenger.of(context)
+                                                  .removeCurrentSnackBar();
+                                            }
+
+                                          }
+                                          
+                                          print(tapped);
+                                          for (int tableId in selectedTables) {
+                                            TableModel? table = _productList.firstWhere((element) => element.id == tableId, orElse: () => null);
+                                            if (table != null) {
+                                              tablesToAdd.add(table);
+                                            }
+                                          }
+                                          print(selectedTables);
+                                        });
+                                        // if (_productList[index].order_id == null) {
+                                        // tapped = tapped++;
+                                        // if (tapped==1) {
+                                        //   _showBookNowSnackbar(context);
+                                        // } else  if (tapped==0){
+                                        //  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                        // }
+                                        // }
+                                      },
+                                      addItem: (() {
+                                        double hours =
+                                            double.parse(noOfHours.text);
+                                        // double totalPrice =
+                                        //     hours * _productList[index].price;
+                                        //  if (selectedProduct != null) {
+                                              // Call addItem with selected product
+                                              addTableCart(t_date, _selectedtimeFrom.text, _selectedtimeTo.text, selectedTables, noOfHours.text);
+                                            // }
+                                        // addTableCart(
+                                        //     _productList[index],
+                                        //     totalPrice,
+                                        //     t_date,
+                                        //     _selectedtimeFrom.text
+                                        //         .toString(),
+                                        //     _selectedtimeTo.text
+                                        //         .toString()
+                                        //     );
+                                      }),
+                                    ),
                                   ),
                                 ),
                               ),
+                              AnimatedPositioned(
+                                  duration: const Duration(milliseconds: 500),
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: 50,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: mainColor,
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(20 * 1.5),
+                                        bottomRight: Radius.circular(20 * 1.5),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                             double hours = double.parse(noOfHours.text);
+                                        double totalPrice = hours ;
+                                            addTableCart(t_date, _selectedtimeFrom.text, _selectedtimeTo.text, selectedTables, noOfHours.text);
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (tapped > 0) {
+                                                  return Colors.teal;
+                                                }
+                                                return Colors.transparent;
+                                              },
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left:60.0, right: 60),
+                                            child: Text((tapped > 0)?
+                                              'Add to Cart ':'',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: (tapped > 0)
+                                                    ? textColor
+                                                    : greyColor6,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
                             ],
                           );
                         },
@@ -647,26 +893,19 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
   }
 
   void calculateHours(String timeString1, String timeString2) {
-    // Parse the time strings into DateTime objects
     DateTime time1 = DateFormat('h:mm a').parse(timeString1);
     DateTime time2 = DateFormat('h:mm a').parse(timeString2);
 
-    // Calculate the duration between the two DateTime objects
     Duration difference = time2.difference(time1);
 
-    // Get the difference in hours
     hours = difference.inHours;
 
-    // Get the difference in hours
     minutes = difference.inMinutes.remainder(60);
-    // print('The difference between $timeString1 and $timeString2 is $hours hours and $minutes minutes');
     if (minutes > 0) {
       hours += 1;
     } else if (hours == 0) {
       hours = 1;
     }
-    noOfHours.text = hours.toString() ;
-    //* widget.table.price).toString();
-    // print('The difference between $timeString1 and $timeString2 is $hours hours and $minutes minutes');
+    noOfHours.text = hours.toString();
   }
 }

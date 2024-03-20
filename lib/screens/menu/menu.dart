@@ -16,6 +16,8 @@ import 'package:cafe_app/api/apiFile.dart';
 import 'package:cafe_app/models/Product.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/custom_widgets.dart';
+
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -25,8 +27,6 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage>
     with SingleTickerProviderStateMixin {
-  
-
   final controller = HomeController();
   late TabController _tabController;
   int userId = 0;
@@ -102,25 +102,26 @@ class _MenuPageState extends State<MenuPage>
     ApiResponse response = await addToCart(product);
     if (response.error == null) {
       setState(() {
-        //add the counter here
-        //incrementCount();
-        retrieveItems();
-        _cartMessage = response.data.toString();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_cartMessage),
-          duration: const Duration(seconds: 1),
-        ));
-        _loading = _loading ? !_loading : _loading;
+            retrieveItems();
+            _cartMessage = response.data.toString();
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //   content: Text(_cartMessage),
+            //   duration: const Duration(seconds: 1),
+            // ));
+             ScaffoldMessenger.of(context).showSnackBar(
+              snackBarText(title: '', message: _cartMessage)
+            );
+            _loading = _loading ? !_loading : _loading;
       });
     } else if (response.error == ApiConstants.unauthorized) {
-      logoutUser();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Login()),
-          (route) => false);
+            logoutUser();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const Login()),
+                (route) => false);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("${response.error}"),
-          duration: const Duration(seconds: 1)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("${response.error}"),
+                duration: const Duration(seconds: 1)));
     }
   }
 
@@ -130,24 +131,24 @@ class _MenuPageState extends State<MenuPage>
     ApiResponse response = await addItemToCart(product);
     if (response.error == null) {
       setState(() {
-        //add the counter here
-        //incrementCount();
-        retrieveItems();
-        _cartMessage = response.data.toString();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(_cartMessage),
-            duration: const Duration(seconds: 1)));
-        _loading = _loading ? !_loading : _loading;
+            retrieveItems();
+            _cartMessage = response.data.toString();
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //     content: Text(_cartMessage), duration: const Duration(seconds: 1)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              snackBarText(title: '', message: _cartMessage)
+            );
+            _loading = _loading ? !_loading : _loading;
       });
     } else if (response.error == ApiConstants.unauthorized) {
       logoutUser();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Login()),
-          (route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const Login()),
+                (route) => false);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("${response.error}"),
-          duration: const Duration(seconds: 1)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("${response.error}"),
+                duration: const Duration(seconds: 1)));
     }
   }
 
@@ -165,7 +166,7 @@ class _MenuPageState extends State<MenuPage>
           ),
           actions: const [
             Padding(
-              padding:  EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 20.0),
               child: Center(
                 child: BadgeWidget(),
               ),
@@ -200,10 +201,10 @@ class _MenuPageState extends State<MenuPage>
                                     controller: _tabController,
                                     isScrollable: true,
                                     // indicator: CircleTabIndicator(color: Color(0xffd17842), radius: 4),
-                                    indicator:  UnderlineTabIndicator(
+                                    indicator: UnderlineTabIndicator(
                                         borderSide: BorderSide(
                                             width: 3, color: redColor),
-                                        insets:const EdgeInsets.symmetric(
+                                        insets: const EdgeInsets.symmetric(
                                             horizontal: 16)),
                                     labelColor: greyColor,
                                     labelStyle: const TextStyle(
@@ -238,7 +239,7 @@ class _MenuPageState extends State<MenuPage>
                                     ? Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color: mainColor,
                                           borderRadius: const BorderRadius.only(
                                             bottomLeft:
@@ -277,7 +278,7 @@ class _MenuPageState extends State<MenuPage>
                                     : Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color: mainColor,
                                           borderRadius: const BorderRadius.only(
                                             bottomLeft:

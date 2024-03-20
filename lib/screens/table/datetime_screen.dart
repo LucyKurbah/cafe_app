@@ -76,41 +76,41 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
     return postgresDateTime.toString();
   }
 
-  Future<void> addCart(TableModel table, String totalPrice, String date,
+  Future<void> addCart(TableModel table, double totalPrice, String date,
       String timeFrom, String timeTo) async {
     userId = await getUserId();
     DateTime time_from = DateFormat('h:mm a').parse(timeFrom);
     DateTime time_to = DateFormat('h:mm a').parse(timeTo);
     String bookDate = convertTimeToPostgres(timeFrom, date);
-    ApiResponse response = await addTableToCart(
-        table, totalPrice, bookDate, time_from.toString(), time_to.toString());
+    // ApiResponse response = await addTableToCart(
+    //     table, totalPrice, bookDate, time_from.toString(), time_to.toString(),);
 
-    if (response.error == null) {
-      if (response.data == 200) {
-        setState(() {
-          //add the counter here
-          //incrementCount();
-          _cartMessage = "Table added to Cart";
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(_cartMessage)));
-          _loading = _loading ? !_loading : _loading;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const AddOnPage()),
-              (route) => false);
-        });
-      } else if (response.data == "X") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Table is not available for the selected time")));
-      }
-    } else if (response.error == ApiConstants.unauthorized) {
-      logoutUser();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Login()),
-          (route) => false);
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("${response.error}")));
-    }
+    // if (response.error == null) {
+    //   if (response.data == 200) {
+    //     setState(() {
+    //       //add the counter here
+    //       //incrementCount();
+    //       _cartMessage = "Table added to Cart";
+    //       ScaffoldMessenger.of(context)
+    //           .showSnackBar(SnackBar(content: Text(_cartMessage)));
+    //       _loading = _loading ? !_loading : _loading;
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //           MaterialPageRoute(builder: (context) => const AddOnPage()),
+    //           (route) => false);
+    //     });
+    //   } else if (response.data == "X") {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //         content: Text("Table is not available for the selected time")));
+    //   }
+    // } else if (response.error == ApiConstants.unauthorized) {
+    //   logoutUser();
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(builder: (context) => const Login()),
+    //       (route) => false);
+    // } else {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(SnackBar(content: Text("${response.error}")));
+    // }
   }
 
   @override
@@ -403,7 +403,7 @@ class _DateTimeScreenState extends State<DateTimeScreen> {
                                               // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => CartScreen()));
                                               addCart(
                                                   widget.table,
-                                                  noOfHours.text,
+                                                  double.parse(noOfHours.text),
                                                   t_date,
                                                   _selectedtimeFrom.text
                                                       .toString(),

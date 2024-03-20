@@ -5,21 +5,54 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Constants.dart';
 
-showSnackBar(
-    {required title,
-    required message,
-    Duration? duration,
-    position: SnackPosition.BOTTOM}) {
+showSnackBar({required title,required message,Duration? duration,position: SnackPosition.BOTTOM}) 
+{
   double bottomPadding = position == SnackPosition.BOTTOM
       ? kBottomNavigationBarHeight + 40.0 // Add some extra spacing
       : 0.0;
   Get.snackbar(title, message,
       backgroundColor: (title == 'error') ? Colors.redAccent : greyColor,
       colorText: textColor,
+
       snackPosition: position,
       margin: EdgeInsets.fromLTRB(
           10, 10, 10, bottomPadding), // Add padding at the bottom
       duration: duration ?? const Duration(seconds: 2));
+}
+
+snackBarText({required title,required message}){
+  return SnackBar(
+
+    content: Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(16),
+          height: 60,
+          decoration: BoxDecoration(
+            color: (title == 'error') ? redColor : Colors.teal,
+            borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
+          child: Row(
+            children: [
+              SizedBox(width: 40,),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start ,
+                  children: [
+                    
+                    Text('$message', style: TextStyle(color: textColor, fontSize: 16),maxLines: 2, overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+  );
 }
 
 Widget textView(String text,

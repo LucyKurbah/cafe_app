@@ -1,5 +1,6 @@
 import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/dimensions.dart';
+import 'package:cafe_app/main.dart';
 import 'package:cafe_app/screens/home/components/cart_card.dart';
 import 'package:cafe_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ import 'package:cafe_app/services/cart_service.dart';
 import 'package:cafe_app/screens/user/login.dart';
 import 'package:cafe_app/models/Cart.dart';
 import 'package:cafe_app/screens/home/components/cart_detailsview_card.dart';
+import 'package:intl/intl.dart';
 import '../../components/news_card_skelton.dart';
+import '../../models/TableCart.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -22,7 +25,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   bool _isLoading = true;
   String _cartMessage = '';
-  List<dynamic> _cartList = [];
+  List<dynamic> _cartList  = [], _tableList = [];
   double totalPrice = 0.0;
 
   Future<void> goToPayment(cartList, totalPrice) async {
@@ -48,6 +51,7 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _isLoading = true;
         retrieveCart();
+        retrieveTableCart();
       });
     });
     super.initState();
@@ -67,6 +71,27 @@ class _CartScreenState extends State<CartScreen> {
           MaterialPageRoute(builder: (context) => const Login()),
           (route) => false);
     } else {
+      print(response.error);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("${response.error}")));
+    }
+  }
+  Future<void> retrieveTableCart() async {
+ 
+
+    ApiResponse response = await getTableCart();
+    if (response.error == null) {
+      setState(() {
+        _tableList = List<TableCart>.from(response.data as List<dynamic>);
+        _isLoading = _isLoading ? !_isLoading : _isLoading;
+      });
+    } else if (response.error == ApiConstants.unauthorized) {
+      logoutUser();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const Login()),
+          (route) => false);
+    } else {
+
       print(response.error);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("${response.error}")));
@@ -96,15 +121,16 @@ class _CartScreenState extends State<CartScreen> {
     ApiResponse response = await incrementCart(cart);
     if (response.error == null) {
       _cartMessage = response.data.toString();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_cartMessage), duration: const Duration(seconds: 1)));
       _isLoading = _isLoading ? !_isLoading : _isLoading;
-    } else if (response.error == ApiConstants.unauthorized) {
+      retrieveTotal();
+    } 
+    else if (response.error == ApiConstants.unauthorized) {
       logoutUser();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const Login()),
           (route) => false);
-    } else {
+    }
+    else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("${response.error}"),
           duration: const Duration(seconds: 1)));
@@ -114,21 +140,23 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> removeCart(Cart cart) async {
     ApiResponse response = await decrementCart(cart);
     if (response.error == null) {
+      retrieveTotal();
       if (cart.count < 1) {
         setState(() {
           _cartList.remove(cart);
         });
       }
+      
       _cartMessage = response.data.toString();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_cartMessage), duration: const Duration(seconds: 1)));
       _isLoading = _isLoading ? !_isLoading : _isLoading;
-    } else if (response.error == ApiConstants.unauthorized) {
+    } 
+    else if (response.error == ApiConstants.unauthorized) {
       logoutUser();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const Login()),
           (route) => false);
-    } else {
+    } 
+    else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("${response.error}"),
           duration: const Duration(seconds: 1)));
@@ -143,15 +171,16 @@ class _CartScreenState extends State<CartScreen> {
       if (response.error == null) {
         print("NULL ERROR__________________");
         if (response.data == 200) {
-          showSnackBar(title: 'Payment Done', message: '');
+          // showSnackBar(title: 'Payment Done', message: '');
           setState(() {
             print("Reteivinbg cart");
             retrieveCart();
+            retrieveTableCart();
           });
           return true;
         } else {
-          showSnackBar(
-              title: 'error', message: 'Payment Failed! Please Try Again');
+          // showSnackBar(
+          //     title: 'error', message: 'Payment Failed! Please Try Again');
           return false;
         }
       } else {
@@ -165,6 +194,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(today);
     return Scaffold(
         backgroundColor: mainColor,
         appBar: _buildAppBar(),
@@ -178,38 +209,37 @@ class _CartScreenState extends State<CartScreen> {
             : Stack(
                 children: [
                   Container(),
-                  Positioned(
-                      child: ListView.builder(
+                  ListView.builder(
                     itemCount: _cartList.length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(
-                        top: 16, left: 16, right: 16, bottom: 115),
+                    top: 16, left: 16, right: 16, bottom: 115),
                     itemBuilder: (context, index) {
-                      final cart = _cartList[index];
-                      return CartCard(
-                        key: Key(cart.item_id.toString()),
-                        cart: cart,
-                        addItem: () {
-                          setState(() {
-                            cart.count++;
-                          });
-                          addCart(cart);
-                        },
-                        removeItem: () {
-                          setState(() {
-                            if (cart.count > 1) {
-                              cart.count--;
-                            } else {
-                              setState(() {
-                                _cartList.remove(cart);
-                              });
-                            }
-                          });
-                          removeCart(cart);
-                        },
-                      );
+                  final cart = _cartList[index];
+                  return CartCard(
+                    key: Key(cart.item_id.toString()),
+                    cart: cart,
+                    addItem: () {
+                      setState(() {
+                        cart.count++;
+                      });
+                      addCart(cart);
                     },
-                  )),
+                    removeItem: () {
+                      setState(() {
+                        if (cart.count > 1) {
+                          cart.count--;
+                        } else {
+                          setState(() {
+                            _cartList.remove(cart);
+                          });
+                        }
+                      });
+                      removeCart(cart);
+                    },
+                  );
+                    },
+                  ),
                   _buildBottom(),
                 ],
               ));
@@ -244,10 +274,26 @@ class _CartScreenState extends State<CartScreen> {
       left: 0,
       right: 0,
       child: Container(
-        color: greyColor7,
+        color: mainColor,
         padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10, top: 5),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  Text("Order Date",style: TextStyle(
+                          color: greyColor6,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold)),
+                  Text("${ DateFormat('dd/MM/yyyy').format(DateTime.now())}",
+                      style: TextStyle(
+                          color: greyColor6,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13.0)),
+              ],
+            ),
+            SizedBox(height: Dimensions.height20,),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -273,7 +319,7 @@ class _CartScreenState extends State<CartScreen> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 32, vertical: 16),
-                      backgroundColor: iconColors1,
+                      backgroundColor: redColor,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

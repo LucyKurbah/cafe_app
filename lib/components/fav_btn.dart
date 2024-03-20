@@ -13,6 +13,6 @@ class FavBtn extends StatelessWidget {
         padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20), color: redColor),
-        child: Text("Add",style: TextStyle(color: textColor, fontSize: 12),));
+        child: Text("Add",style: TextStyle(color: textColor, fontSize: 17),));
   }
 }

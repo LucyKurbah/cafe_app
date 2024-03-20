@@ -76,7 +76,7 @@ class AddOnCard extends StatelessWidget {
                 //     ? 
                     InkWell(
                         onTap: addItem,
-                        child: Text("Add",style: TextStyle(color: textColor, fontSize: 12),),
+                        child: Text("Add",style: TextStyle(color: textColor, fontSize: 17),),
                       )
                     // : 
                     // Row(

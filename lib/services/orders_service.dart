@@ -35,6 +35,8 @@ Future<ApiResponse> getOrders() async{
         }
         else{
           apiResponse.data =  jsonDecode(response.body).toList();
+          print("Order List");
+          print(apiResponse.data);
         } 
         break;
       case 401:

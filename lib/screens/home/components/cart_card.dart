@@ -45,13 +45,17 @@ class CartCard extends StatelessWidget {
                           cart.item_name,
                           style: TextStyle(color: textColor),
                         ),
+                        if(cart.flag == 'E' || cart.flag == 'C' || cart.flag == 'T')
+                          Text("${cart.date}", style: TextStyle(color: greyColor),),
+                        if(cart.flag == 'E' || cart.flag == 'C' || cart.flag == 'T')
+                          Text("${cart.timeFrom} | ${cart.timeTo}", style: TextStyle(color: greyColor),),
                         Text(
                           "₹ ${cart.item_price} ",
                           style:  TextStyle(
                               color: lightBlueGrey,
                               fontWeight: FontWeight.bold),
                         ),
-                        if (cart.flag != 'E' && cart.flag != 'C')
+                        
                           Container(
                             height: 40,
                             width: 150,
@@ -66,15 +70,17 @@ class CartCard extends StatelessWidget {
                                       Icons.delete_rounded,
                                       color: textColor,
                                     )),
-                                Text(
-                                  "${cart.count}",
-                                  style:  TextStyle(
-                                      fontSize: 16, color: textColor),
-                                ),
-                                GestureDetector(
-                                  onTap: addItem,
-                                  child: Icon(Icons.add, color: textColor),
-                                ),
+                                if (cart.flag != 'E' && cart.flag != 'C' && cart.flag != 'T')
+                                  Text(
+                                    "${cart.count}",
+                                    style:  TextStyle(
+                                        fontSize: 16, color: textColor),
+                                  ),
+                                if (cart.flag != 'E' && cart.flag != 'C' && cart.flag != 'T')
+                                  GestureDetector(
+                                    onTap: addItem,
+                                    child: Icon(Icons.add, color: textColor),
+                                  ),
                               ],
                             ),
                           )

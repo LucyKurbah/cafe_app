@@ -43,7 +43,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                 TextButton(
                       onPressed: () => controller.jumpToPage(2),
                       
-                      child: const Text('SKIP',style: TextStyle(fontSize: 20)), ),
+                      child:  Text('SKIP',style: TextStyle(fontSize: 20, color: tealColor)), ),
                 SmoothPageIndicator(
                             controller: controller,
                             count: 3,
@@ -52,7 +52,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                                 dotColor: greyColor,
                                 dotWidth: 10,
                                 dotHeight: 10,
-                                activeDotColor: iconColors1,
+                                activeDotColor: tealColor,
                                 
                                 ),
                             onDotClicked: (index) => controller.animateToPage(index,
@@ -84,7 +84,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       onPressed: () => controller.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeInOut),
-                      child: const Text('NEXT',style: TextStyle(fontSize: 20))
+                      child:  Text('NEXT',style: TextStyle(fontSize: 20, color: tealColor))
                 ),
               ],
             ),

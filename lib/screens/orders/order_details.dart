@@ -79,9 +79,8 @@ class _OrderDetailsState extends State<OrderDetails> {
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.start,
+                
                 children: [
-                  
                   Expanded(
                     child: SizedBox(
                       child: ListView.separated(
@@ -94,7 +93,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                   SizedBox(
-                    height: 180, // adjust the height as needed
+                    height: 180, 
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
@@ -149,9 +148,9 @@ class _OrderDetailsState extends State<OrderDetails> {
   _buildAppBar() {
     return AppBar(
       backgroundColor: mainColor,
-      centerTitle: true,
+      // centerTitle: true,
       title: Text(
-        "#Order ${widget.order_id}",
+        "ORDER #${widget.order_id}",
         style: TextStyle(color: textColor),
       ),
       elevation: 0.0,

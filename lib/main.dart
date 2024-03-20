@@ -3,6 +3,7 @@ import 'package:cafe_app/notification_services.dart';
 import 'package:cafe_app/screens/onboard/onboard_screen.dart';
 import 'package:cafe_app/screens/orders/my_orders.dart';
 import 'package:cafe_app/screens/splash/splash_screen.dart';
+import 'package:cafe_app/services/api_response.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,6 +20,7 @@ import 'screens/conference/conference_screen.dart';
 import 'package:get/get.dart';
 import 'screens/user/login.dart';
 import 'screens/user/register.dart';
+import 'services/auth_service.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', //id
@@ -85,6 +87,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // notificationServices.requestNotificationPermission();
+    saveDeviceTokenId();
     saveDeviceTokenIdToSharedPreferences();
     
     FirebaseMessaging.instance.getInitialMessage();
@@ -131,8 +134,17 @@ class _MyAppState extends State<MyApp> {
   Future<void> saveDeviceTokenIdToSharedPreferences() async {
     isTokenRefresh();
     String? deviceTokenId = await messaging.getToken();
-    print("DEVICE TOKEN ID IS");
-    print(deviceTokenId);
+
+  }
+
+  Future<void> saveDeviceTokenId() async {
+    String? deviceTokenId = await messaging.getToken();
+    ApiResponse response = await saveDeviceToken(deviceTokenId);
+    if (response.error == null) {
+    
+       print("Token saved");
+       print(deviceTokenId);
+    } 
   }
 
   void isTokenRefresh() async {

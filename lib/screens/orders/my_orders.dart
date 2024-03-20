@@ -177,6 +177,7 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   Future<void> _loadOrders() async {
+    print("Load Orders");
     ApiResponse response =
         await getOrders(); // call order service to get orders
     if (response.error == null) {
@@ -243,7 +244,7 @@ class _MyOrdersState extends State<MyOrders> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "#${product['id']}",
+                            "ORDER #${product['id']}",
                             style: TextStyle(color: textColor),
                           ),
                           Text(
@@ -254,7 +255,7 @@ class _MyOrdersState extends State<MyOrders> {
                           ),
                           Text(
                             " ${product['date']}",
-                            style: TextStyle(color: textColor),
+                            style: TextStyle(color: greyColor),
                           ),
                           // Text(product.item_name, style: TextStyle(color: textColor),),
                           // Text(product.item_name, style: TextStyle(color: textColor),),

@@ -159,11 +159,6 @@ Future<ApiResponse> getTableDateTimeDetails( timeFrom, timeTo, bookDate) async{
     String formattedDate=convertDateToPostgres(bookDate);
     String time_from = (convertTimeToPostgres(timeFrom,bookDate));
     String time_to = (convertTimeToPostgres(timeTo,bookDate));
-
-    print(time_from);
-    print(time_to);
-    print(formattedDate);
-
     final response = await http.post(Uri.parse(ApiConstants.getTableDateTimeDetailsUrl),
                 headers: {
                     'Accept' : 'application/json',
@@ -176,14 +171,13 @@ Future<ApiResponse> getTableDateTimeDetails( timeFrom, timeTo, bookDate) async{
                       'bookDate' : formattedDate.toString()
                     },
                );
-  print("ValidateDAteTime");
-   print(response.statusCode);
+
     switch(response.statusCode)
     {
-      case 200:
-        print(response.body);
-        // apiResponse.data =  jsonDecode(response.body);
+      case 200:      
          apiResponse.data =  jsonDecode(response.body).map((p) => TableModel.fromJson(p)).toList();
+         print("TABLE DETAILS");
+         print(response.body);
         break;
       case 401:
         apiResponse.error = ApiConstants.unauthorized;

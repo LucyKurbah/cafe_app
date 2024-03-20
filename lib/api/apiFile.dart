@@ -4,11 +4,16 @@ class ApiConstants {
   static String bran_office_ip="10.179.28.63:8001";
   static String home_ip="192.168.29.48:8000";
   static String bran_ip="192.168.1.51:8000";
+   static String bisci_ip="64.227.135.238:8080";
 
   static String right_now_ip=office_ip;
 
   static String baseUrl = 'http://$right_now_ip/api';
   static String ipUrl = 'http://10.179.2.187';
+  
+  //SAVE DEVICE TOKEN
+  static String updateDeviceToken = '$baseUrl/updateDeviceToken';
+
   //LOGIN
   static String loginUrl = '$baseUrl/login';
   static String registerUrl = '$baseUrl/register';
@@ -41,6 +46,7 @@ class ApiConstants {
   static String checkFloorDetailsUrl = '$baseUrl/checkFloorDetails';
   //CART
   static String cartUrl = '$baseUrl/cart/getCart';
+  static String tableCartUrl = '$baseUrl/cart/getTableCart';
   static String addCartUrl = '$baseUrl/cart/add';
   static String removeCartUrl = '$baseUrl/cart/remove';
   static String getTotalUrl = '$baseUrl/cart/getTotal'; 
@@ -58,5 +64,6 @@ class ApiConstants {
   static String unauthorized = 'Unauthorized';
   static String somethingWentWrong = 'Something went wrong';
   static String notLoggedIn = 'Please log in first!';
-   static String noTable = 'No Table available for the date and time!';
+  static String noTable = 'No Table available for the date and time!';
+  static String tableInCart = 'Table already in cart!';
 }
