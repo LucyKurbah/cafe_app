@@ -39,9 +39,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  await Firebase.initializeApp();
   
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -54,8 +53,9 @@ Future<void> main() async {
 
   final pref = await SharedPreferences.getInstance();
   final showHome = pref.getBool('showHome') ?? false;
+
   runApp(MyApp(showHome: showHome));
-  DependencyInjection.init();
+  // DependencyInjection.init();
 }
 
 class MyApp extends StatefulWidget {
@@ -86,6 +86,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    
     // notificationServices.requestNotificationPermission();
     saveDeviceTokenId();
     saveDeviceTokenIdToSharedPreferences();

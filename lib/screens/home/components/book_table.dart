@@ -35,7 +35,7 @@ class _BookTableState extends State<BookTable> {
     // List<Widget> containers = [];
     // if (widget.table.table_seats == 4) {
     // }
-  
+ 
   void _onTap() {
     setState(() {
       if (widget.table.order_id == null) {
@@ -56,6 +56,13 @@ class _BookTableState extends State<BookTable> {
     });
 
   }
+  Color getColor() {
+  if (tapped) {
+    return Color.fromARGB(255, 11, 83, 76);
+  } else {
+    return widget.table.order_id == null ? greyColor : greyColor8!;
+  }
+  }
    return GestureDetector(
     onTap: _onTap, 
      child:     
@@ -74,7 +81,7 @@ class _BookTableState extends State<BookTable> {
                   width: 20,
                     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                     decoration: BoxDecoration(
-                      color: tapped ? Color.fromARGB(255, 18, 65, 60) : greyColor7,
+                      color: widget.table.order_id==null ? (tapped?Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor9,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(7),
                       ),
@@ -84,7 +91,7 @@ class _BookTableState extends State<BookTable> {
                   width: 20,
                     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                     decoration: BoxDecoration(
-                      color: tapped ? Color.fromARGB(255, 18, 65, 60) : greyColor7,//(widget.table.order_id == null ? greyColor : greyColor8),
+                      color: widget.table.order_id==null ? (tapped ? Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor9,//(widget.table.order_id == null ? greyColor : greyColor8),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(7),
                       ),
@@ -102,7 +109,7 @@ class _BookTableState extends State<BookTable> {
                   Radius.circular(20),
                 ), 
                 border: Border.all(
-                  color: tapped ?  Color.fromARGB(255, 11, 83, 76): greyColor, // Set the border color to teal
+                  color: getColor(), // Set the border color to teal
                   width: 2, // Set the border width as desired
                 ),            
               ),
@@ -112,10 +119,14 @@ class _BookTableState extends State<BookTable> {
                     SizedBox(height: 20,),
                      Text(
                        "T-0${widget.table.id}", 
-                       style: TextStyle(color: greyColor7),
+                       style: TextStyle(
+                        color:  widget.table.order_id==null ? (tapped?Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor8,
+                        ),
                      ),
                      SizedBox(height: 10,),
-                      Text("${widget.table.table_seats} seats", style: TextStyle(color: greyColor7))
+                      Text("${widget.table.table_seats} seats", style: TextStyle(
+                      color:  widget.table.order_id==null ? (tapped?Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor8,
+                        ))
                    ],
                  ),
                ),
@@ -131,7 +142,7 @@ class _BookTableState extends State<BookTable> {
                 width: 20,
                   padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                   decoration: BoxDecoration(
-                    color: tapped ? Color.fromARGB(255, 18, 65, 60) : greyColor7,
+                     color: widget.table.order_id==null ? (tapped?Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor9,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(7),
                     ),
@@ -142,7 +153,7 @@ class _BookTableState extends State<BookTable> {
                 width: 20,
                   padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                   decoration: BoxDecoration(
-                    color: tapped ? Color.fromARGB(255, 18, 65, 60) : greyColor7,
+                     color: widget.table.order_id==null ? (tapped?Color.fromARGB(255, 18, 65, 60) : greyColor7): greyColor9,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(7),
                     ),

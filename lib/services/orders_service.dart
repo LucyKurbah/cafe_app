@@ -21,6 +21,7 @@ Future<ApiResponse> getOrders() async{
                        'user_id': userId.toString(),
                     },   
                );
+               print(response.body);
     switch(response.statusCode)
     {
       
@@ -80,8 +81,10 @@ Future<ApiResponse> getOrdersDetails(order_id) async{
           apiResponse.error = ApiConstants.notLoggedIn;
         }
         else{
-          apiResponse.data =  jsonDecode(response.body).map((p) => Order.fromJson(p)).toList();
-
+         
+           apiResponse.data =  jsonDecode(response.body).map((p) => Order.fromJson(p)).toList();
+           print("++++++++++++++++++++++tewst++++++++++++++++++++++++++++++++++");
+           print(response.body);
         } 
         break;
       case 401:

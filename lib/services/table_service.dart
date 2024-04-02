@@ -20,7 +20,7 @@ Future<ApiResponse> getAvailableTables(DateTime date, TimeOfDay time) async {
     String formattedTime = '${time.hour}:${time.minute}';
 
     final response = await http.post(
-      Uri.parse(ApiConstants.availableTablesUrl),
+      Uri.parse(ApiConstants.getAllTablesUrl),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

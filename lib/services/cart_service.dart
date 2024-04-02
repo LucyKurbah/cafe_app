@@ -1,3 +1,4 @@
+import 'package:cafe_app/models/Coupon.dart';
 import 'package:cafe_app/models/Table.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -204,6 +205,11 @@ Future<ApiResponse> removeItemFromCart(AddOn item) async {
 
 Future<ApiResponse> addTableToCart(String date, String timeFrom, String timeTo, List<int> selectedTables, String hours) async {
   String  tableIds= selectedTables.join(',');
+   print(tableIds);
+    print(date);
+    print(timeFrom);
+    print(timeTo);
+
 
   ApiResponse apiResponse = ApiResponse();
   try {
@@ -222,19 +228,26 @@ Future<ApiResponse> addTableToCart(String date, String timeFrom, String timeTo, 
           'flag': 'T'
       },
     );
+    print(response.statusCode);
+    print(response.body);
     switch (response.statusCode) {
       case 200:
         if(response.body == '350'){
           apiResponse.data = 350;
-        }else{
-          apiResponse.data = jsonDecode(response.body);
+        }else if(response.body == '500'){
+          apiResponse.error = ApiConstants.serverError;
+        }
+        else{
+          apiResponse.data ='200'; // jsonDecode(response.body);
+         
         }
         break;
       case 500:
-          apiResponse.error = ApiConstants.unauthorized;
+          apiResponse.error = ApiConstants.serverError;
           break;
       default:
           apiResponse.error = response.statusCode.toString();
+          print("Error");
           print(response.statusCode.toString());
         break;
     }
@@ -439,16 +452,16 @@ Future<ApiResponse> getTotal() async {
         'user_id': userId.toString(),
       },
     );
-
+    
     switch (response.statusCode) {
       case 200:
-        String responseString = (jsonDecode(response.body));
-        double value = double.parse(responseString);
-        apiResponse.data = value;
-        print(apiResponse.data);
+          apiResponse.data =  jsonDecode(response.body).toList();
         break;
-      case 401:
+      case 400:
         apiResponse.error = ApiConstants.unauthorized;
+        break;
+      case 500:
+        apiResponse.error = ApiConstants.serverError;
         break;
       default:
         apiResponse.error = response.statusCode.toString();
@@ -494,19 +507,30 @@ Future<ApiResponse> saveOrder(cartList, totalPrice) async {
   return apiResponse;
 }
 
-Future<ApiResponse> makePayment() async {
+Future<ApiResponse> makePayment(totalPrice) async {
   ApiResponse apiResponse = ApiResponse();
   String token = await getToken();
   int userId = await getUserId();
+  print("Before Payment");
   try {
-    final response = await http.post(
-      Uri.parse(ApiConstants.makePayment),
-      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
-      body: {
-        'user_id': userId.toString(),
-      },
-    );
+    // final response = await http.post(
+    //   Uri.parse(ApiConstants.makePayment),
+    //   headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    //   body: {
+    //     'user_id': userId.toString(),
+    //     'name' : 'Lucy',
+    //     'email' : 'lucykurbah52@gmail.com',
+    //     'amount' : totalPrice
+        
+    //   },
+    // );
+    final response = await http.get(
+        Uri.parse('${ApiConstants.makePayment}?user_id=$userId&name=Lucy&email=lucykurbah52@gmail.com&amount=$totalPrice'),
+        headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      );
+    print("After Payment");
     print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       if (response.body == '200') {
         print(response.body);
@@ -526,4 +550,69 @@ Future<ApiResponse> makePayment() async {
     // Handle the error
     throw Exception(e.toString());
   }
+}
+
+Future<ApiResponse> retrieveAllCoupons() async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+    int userId = await getUserId();
+    final response = await http.post(
+      Uri.parse(ApiConstants.retrieveAllCoupons),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: {
+        'user_id': userId.toString(),
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        
+          apiResponse.data =
+              jsonDecode(response.body).map((p) => Coupon.fromJson(p)).toList();
+        break;
+      case 400:
+        apiResponse.error = ApiConstants.serverError;
+        break;
+      default:
+        apiResponse.error = response.statusCode.toString();
+        break;
+    }
+  } catch (e) {
+    apiResponse.error = e.toString();
+  }
+  return apiResponse;
+}
+
+Future<ApiResponse> addCouponToCart(Coupon coupon) async {
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    String token = await getToken();
+    int userId = await getUserId();
+   
+    final response = await http.post(
+      Uri.parse(ApiConstants.addCouponToCartUrl),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: {
+        'user_id': userId.toString(),
+        'coupon_id': coupon.id.toString(),
+      },
+    );
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = "Coupon Applied";
+        break;
+      case 401:
+        apiResponse.error = ApiConstants.unauthorized;
+        break;
+      default:
+        apiResponse.error = response.statusCode.toString();
+        break;
+    }
+  } catch (e) {
+    apiResponse.error = e.toString();
+  }
+
+  return apiResponse;
 }

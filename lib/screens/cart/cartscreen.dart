@@ -3,6 +3,7 @@ import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/main.dart';
 import 'package:cafe_app/screens/home/components/cart_card.dart';
 import 'package:cafe_app/screens/home/home_screen.dart';
+import 'package:cafe_app/screens/payment/razorpay.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_app/widgets/custom_widgets.dart';
 import 'package:cafe_app/services/api_response.dart';
@@ -12,9 +13,11 @@ import 'package:cafe_app/services/cart_service.dart';
 import 'package:cafe_app/screens/user/login.dart';
 import 'package:cafe_app/models/Cart.dart';
 import 'package:cafe_app/screens/home/components/cart_detailsview_card.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import '../../components/news_card_skelton.dart';
 import '../../models/TableCart.dart';
+import 'coupon_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -26,7 +29,13 @@ class _CartScreenState extends State<CartScreen> {
   bool _isLoading = true;
   String _cartMessage = '';
   List<dynamic> _cartList  = [], _tableList = [];
-  double totalPrice = 0.0;
+  double totalPrice= 0.0;
+  double coupon_amount= 0.0;
+  double discountedTotal= 0.0;
+  late InAppWebViewController inAppWebViewController;
+  double _progress = 0;
+  int user_id =0;
+
 
   Future<void> goToPayment(cartList, totalPrice) async {
     ApiResponse response = await saveOrder(cartList, totalPrice);
@@ -51,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _isLoading = true;
         retrieveCart();
-        retrieveTableCart();
+        // retrieveTableCart();
       });
     });
     super.initState();
@@ -76,6 +85,7 @@ class _CartScreenState extends State<CartScreen> {
           .showSnackBar(SnackBar(content: Text("${response.error}")));
     }
   }
+  
   Future<void> retrieveTableCart() async {
  
 
@@ -102,7 +112,12 @@ class _CartScreenState extends State<CartScreen> {
     ApiResponse response = await getTotal();
     if (response.error == null) {
       setState(() {
-        totalPrice = response.data as double;
+        List<dynamic> totalAmount = response.data as List<dynamic>;
+        print(totalAmount);
+        totalPrice = double.parse(totalAmount[0]);
+        coupon_amount = double.parse(totalAmount[1]);
+        discountedTotal = double.parse(totalAmount[2]);
+        user_id = int.parse(totalAmount[3].toString());
         _isLoading = _isLoading ? !_isLoading : _isLoading;
       });
     } else if (response.error == ApiConstants.unauthorized) {
@@ -164,7 +179,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<bool> _makePaymentAPI() async {
-    ApiResponse response = await makePayment();
+    ApiResponse response = await makePayment(totalPrice);
     try {
       print(response.data);
       print("response.error");
@@ -194,8 +209,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime today = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(today);
+
     return Scaffold(
         backgroundColor: mainColor,
         appBar: _buildAppBar(),
@@ -206,43 +220,48 @@ class _CartScreenState extends State<CartScreen> {
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 20),
               )
-            : Stack(
-                children: [
-                  Container(),
-                  ListView.builder(
+            : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
                     itemCount: _cartList.length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(
                     top: 16, left: 16, right: 16, bottom: 115),
+                     
                     itemBuilder: (context, index) {
-                  final cart = _cartList[index];
-                  return CartCard(
-                    key: Key(cart.item_id.toString()),
-                    cart: cart,
-                    addItem: () {
-                      setState(() {
-                        cart.count++;
-                      });
-                      addCart(cart);
-                    },
-                    removeItem: () {
-                      setState(() {
-                        if (cart.count > 1) {
-                          cart.count--;
-                        } else {
-                          setState(() {
-                            _cartList.remove(cart);
-                          });
-                        }
-                      });
-                      removeCart(cart);
-                    },
-                  );
+                          final cart = _cartList[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: CartCard(
+                              key: Key(cart.item_id.toString()),
+                              cart: cart,
+                              addItem: () {
+                                setState(() {
+                                  cart.count++;
+                                });
+                                addCart(cart);
+                              },
+                              removeItem: () {
+                                setState(() {
+                                  if (cart.count > 1) {
+                                    cart.count--;
+                                  } else {
+                                    setState(() {
+                                      _cartList.remove(cart);
+                                    });
+                                  }
+                                });
+                                removeCart(cart);
+                              },
+                            ),
+                          );
                     },
                   ),
-                  _buildBottom(),
-                ],
-              ));
+                ),
+                _buildBottom(),
+              ],
+            ));
   }
 
   _buildAppBar() {
@@ -267,7 +286,96 @@ class _CartScreenState extends State<CartScreen> {
       ],
     );
   }
-
+  // coupon()
+  // {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       // print(product['id']);
+  //       Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: ((context) => CartScreen())));
+  //     },
+  //     child: Container(
+  //       height: 50,
+  //       width: double.infinity,
+  //       child: Card(
+  //         color: greyColor,
+  //         child: Column(
+  //           children: [
+  //             Row(
+  //               children: [
+  //                 SizedBox(
+  //                   height: 20,
+  //                   width: 200,
+  //                   child: ListTile(
+  //                     title: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Text(
+  //                           "APPLY COUPON",
+  //                           style: TextStyle(color: textColor),
+  //                         ),
+                        
+  //                         // Text(product.item_name, style: TextStyle(color: textColor),),
+  //                         // Text(product.item_name, style: TextStyle(color: textColor),),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const Expanded(child: SizedBox()),
+  //                 Icon(
+  //                   Icons.chevron_right,
+  //                   color: greyColor6,
+  //                   size: 30,
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  Widget coupon() {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: ((context) => CouponScreen())),
+      );
+    },
+    child: Container(
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: mainColor,
+        borderRadius: BorderRadius.circular(25), // Rounded edges
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: 20), // Add space on the left side
+          Expanded(
+            child: Center(
+              child: Text(
+                "APPLY COUPON",
+                style: TextStyle(color: textColor),
+              ),
+            ),
+          ),
+          Icon(
+            Icons.chevron_right,
+            color: greyColor6,
+            size: 30,
+          ),
+          SizedBox(width: 20), // Add space on the right side
+        ],
+      ),
+    ),
+  );
+}
   Positioned _buildBottom() {
     return Positioned(
       bottom: 0,
@@ -278,6 +386,8 @@ class _CartScreenState extends State<CartScreen> {
         padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10, top: 5),
         child: Column(
           children: [
+            coupon(),
+            SizedBox(height: Dimensions.height10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -293,17 +403,49 @@ class _CartScreenState extends State<CartScreen> {
                           fontSize: 13.0)),
               ],
             ),
+            SizedBox(height: Dimensions.height10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  Text("Sub Total",style: TextStyle(
+                          color: greyColor6,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold)),
+                  Text("₹ $totalPrice",
+                      style: TextStyle(
+                          color: greyColor6,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13.0)),
+              ],
+            ),
+            SizedBox(height: Dimensions.height10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  Text("Coupon",style: TextStyle(
+                          color: greyColor6,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                  Text("₹ $coupon_amount",
+                      style: TextStyle(
+                          color: greyColor6,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0)),
+              ],
+            ),
             SizedBox(height: Dimensions.height20,),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Subtotal",
+                  Text("Total",
                       style: TextStyle(
                           color: textColor,
                           fontSize: 15,
                           fontWeight: FontWeight.bold)),
-                  Text("₹ $totalPrice",
+                  Text("₹ $discountedTotal",
                       style: TextStyle(
                           color: textColor,
                           fontWeight: FontWeight.bold,
@@ -319,7 +461,7 @@ class _CartScreenState extends State<CartScreen> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 32, vertical: 16),
-                      backgroundColor: redColor,
+                      backgroundColor: tealColor,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -327,7 +469,13 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     onPressed: () {
                       // goToPayment(_cartList, totalPrice);
-                      _loadUserInfo(context, totalPrice);
+                      
+                      // _loadUserInfo(context, totalPrice);
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: ((context) => Razorpay( discountedTotal: discountedTotal, user_id: user_id))
+                        )
+                      );
                     },
                     child: const Text(
                       "Checkout",
@@ -372,19 +520,43 @@ class _CartScreenState extends State<CartScreen> {
               ),
               const Spacer(),
               Row(
+                
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Total: $totalPrice',
-                    style: TextStyle(
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Dimensions.font20,
-                    ),
-                  ),
+                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                         Text(
+                          'Sub Total: $totalPrice',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: Dimensions.font15,
+                          ),
+                        ),
+                       Text(
+                          'Coupon: $coupon_amount',
+                          style: TextStyle(
+                            color: greyColor,
+                            fontSize: Dimensions.font15,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.height5,),
+                        Text(
+                              'Total: $discountedTotal',
+                              style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Dimensions.font20,
+                              ),
+                        ),
+                     ],
+                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _showPaymentDialog(context);
+                      // _showPaymentDialog(context);
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: ((context) => Razorpay(discountedTotal: discountedTotal, user_id: user_id,))));
                     },
                     child: const Text('Make Payment'),
                   ),

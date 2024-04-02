@@ -9,6 +9,7 @@ class ApiConstants {
   static String right_now_ip=office_ip;
 
   static String baseUrl = 'http://$right_now_ip/api';
+  static String paymentUrl = 'http://$right_now_ip';
   static String ipUrl = 'http://10.179.2.187';
   
   //SAVE DEVICE TOKEN
@@ -34,8 +35,8 @@ class ApiConstants {
   static String itemUrl = '$baseUrl/getFoodItems';
   static String getAddOnUrl = '$baseUrl/getItems';
   //TABLE
-  static String tableUrl = '$baseUrl/getTables';
-  static String availableTablesUrl = '$baseUrl/getAvailableTables';
+  static String tableUrl = '$baseUrl/getAllTables';
+  static String getAllTablesUrl = '$baseUrl/getAllTablesUrl';
   static String getTableDetailsUrl = '$baseUrl/validateTable';
   static String getTableDateTimeDetailsUrl = '$baseUrl/validateTableDateTime';
   //CONFERENCE
@@ -51,7 +52,12 @@ class ApiConstants {
   static String removeCartUrl = '$baseUrl/cart/remove';
   static String getTotalUrl = '$baseUrl/cart/getTotal'; 
   static String saveOrder = '$baseUrl/order/saveDetails';
-  static String makePayment = '$baseUrl/makePayment';
+  //PAYMENT
+  static String makePayment = '$paymentUrl/razorpay-payment';
+  //COUPONS
+  static String retrieveAllCoupons = '$baseUrl/retrieveAllCoupons';
+  static String OldmakePayment = '$baseUrl/makePayment';
+  static String addCouponToCartUrl = '$baseUrl/applyCoupon';
   //ORDER
   static String getOrdersUrl = '$baseUrl/order/getOrdersList';
   static String getOrdersDetailsUrl = '$baseUrl/order/getOrdersDetails';

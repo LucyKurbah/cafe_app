@@ -4,6 +4,7 @@ import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/widgets/custom_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../models/Orders.dart';
 
 class OrderDetailsCard extends StatelessWidget {
@@ -18,7 +19,7 @@ class OrderDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-            height: 120,
+            height: 145,
             width: double.infinity,
             child: Card(
               color: greyColor9,
@@ -27,11 +28,9 @@ class OrderDetailsCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 18.0),
                     child: Row(
-                      children: [
-                        
+                      children: [                       
                          InkWell(
-                                onTap: () {
-                                  
+                                onTap: () {                                
                                 },
                                 child: 
                                 SizedBox(
@@ -46,32 +45,53 @@ class OrderDetailsCard extends StatelessWidget {
                                   ),
                                 ),
                         ),
-                        SizedBox(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width/2,
+                        Expanded(
                           child: ListTile(
                               title: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   Row(
+                                    mainAxisAlignment:(product.flag == 'E' || product.flag == 'C' || product.flag == 'T')? MainAxisAlignment.spaceBetween: MainAxisAlignment.start,
                                     children: [
                                       BigText(" ${product.item_name}",textColor,Dimensions.font20),
-                                      BigText("₹ ${product.item_price}",textColor,Dimensions.font20),
+                                      if(product.flag == 'E' || product.flag == 'C' || product.flag == 'T')
+                                        SmallText("${product.table_date}",greyColor,Dimensions.font15) 
+
+                                     // SmallText("₹ ${product.item_price}  x ${product.quantity}",greyColor,Dimensions.font15),
+                                    ],
+                                  ),
+                                
+                                  // if(product.flag == 'E' || product.flag == 'C' || product.flag == 'T')
+                                  //       Text( "${convertTimeToAMPM(product.time_from)} | ${convertTimeToAMPM(product.time_to)}", style: TextStyle(color: greyColor,fontSize: 13),),
+                                  SizedBox(height: Dimensions.height10,),
+                                  if(product.flag == 'E' || product.flag == 'C' || product.flag == 'T')
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [                                    
+                                       SmallText("${convertTimeToAMPM(product.time_from)} | ${convertTimeToAMPM(product.time_to)}",greyColor,Dimensions.font15)                                   
+                                    ],
+                                  ),
+                                    SizedBox(height: Dimensions.height5,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                    //  BigText(" ${product.item_name}",textColor,Dimensions.font20),
+                                      SmallText("₹ ${product.item_price}  x ${product.quantity}",greyColor,Dimensions.font15),
                                     ],
                                   ),
                                   // SizedBox(height: Dimensions.height5,),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.end,
+                                  //   children: [
+                                  //      SmallText("x ${product.quantity}",greyColor,Dimensions.font15)
+                                  //   ],
+                                  // ),
+                                  //  SizedBox(height: Dimensions.height10,),                                                                                                
+                                  SizedBox(height: Dimensions.height20,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                       SmallText("x ${product.quantity}",greyColor,Dimensions.font17)
-                                    ],
-                                  ),
-                                    SizedBox(height: Dimensions.height20,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                       Text("Amount: ₹ ${product.item_price * product.quantity} ", style:  TextStyle(
-                                        color: lightBlueGrey,
+                                       Text("₹ ${product.item_price * product.quantity} ", style:  TextStyle(
+                                        color: textColor,
                                         fontWeight: FontWeight.bold
                                       ),),
                                     ],
@@ -83,10 +103,15 @@ class OrderDetailsCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                 
                 ],
               ),
             ),
       );
   }
+}
+String convertTimeToAMPM(String time) {
+  final formattedTime = DateFormat('hh:mm a').format(
+    DateFormat('HH:mm:ss').parse(time),
+  );
+  return formattedTime;
 }

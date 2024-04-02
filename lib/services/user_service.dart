@@ -89,7 +89,7 @@ Future<ApiResponse> register(String name, String email, String password, String 
 
 Future<ApiResponse> forgotPassword(String email) async {
   ApiResponse apiResponse = ApiResponse();
-  print("object");
+
   try {
     final response = await http.post(
       Uri.parse(ApiConstants.forgotPasswordUrl),

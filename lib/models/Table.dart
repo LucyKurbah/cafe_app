@@ -9,7 +9,8 @@ class TableModel{
     TableModel({required this.table_name, required this.image, required this.price, required this.id, required this.table_seats, this.order_id});
 
   factory TableModel.fromJson(Map<String, dynamic> json){
-
+print("Order table");
+print(json);
     return TableModel(
       id : json['id'],
       table_name : json['table_name'],

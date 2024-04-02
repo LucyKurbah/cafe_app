@@ -59,18 +59,23 @@ class _MenuPageState extends State<MenuPage>
   }
 
   Future<void> retrieveProducts() async {
+    print("object");
     ApiResponse response = await getProducts();
+ print("1 err");
     if (response.error == null) {
+      print("No err");
       setState(() {
         _productList = response.data as List<dynamic>;
         _loading = _loading ? !_loading : _loading;
       });
     } else if (response.error == ApiConstants.unauthorized) {
+       print("auth");
       logoutUser();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
           (route) => false);
     } else {
+       print("err");
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("${response.error}")));
     }

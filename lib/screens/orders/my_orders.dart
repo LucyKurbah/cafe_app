@@ -73,65 +73,65 @@ class _MyOrdersState extends State<MyOrders> {
               )
             : Column(
                 children: [
-                  SizedBox(
-                    height: 70,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: items.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, index){
-                          return Column(
-                            children: [
-                              GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    current = index;
-                                  });
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 300),
-                                  margin: EdgeInsets.all(10),
-                                  width: 80,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    color: current==index
-                                            ?textColor
-                                            :greyColor6,
-                                    borderRadius: current == index
-                                    ? BorderRadius.circular(15)
-                                    : BorderRadius.circular(10),
-                                    border: current == index
-                                    ? Border.all(color: greyColor, width: 2)
-                                    : null
-                                    ),
-                                  child: Center(
-                                    child: Text(
-                                      items[index],
-                                      style: GoogleFonts.laila(
-                                        fontWeight: FontWeight.w500,
-                                        color: current == index 
-                                        ? mainColor
-                                        : textColor
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: current ==index,
-                                child: Container(
-                                  width: 5,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: textColor
-                                  ),
-                              ))
-                            ],
-                          );
-                      }),
-                  ),
+                  // SizedBox(
+                  //   height: 70,
+                  //   width: double.infinity,
+                  //   child: ListView.builder(
+                  //     physics: const BouncingScrollPhysics(),
+                  //     itemCount: items.length,
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemBuilder: (ctx, index){
+                  //         return Column(
+                  //           children: [
+                  //             GestureDetector(
+                  //               onTap: (){
+                  //                 setState(() {
+                  //                   current = index;
+                  //                 });
+                  //               },
+                  //               child: AnimatedContainer(
+                  //                 duration: const Duration(milliseconds: 300),
+                  //                 margin: EdgeInsets.all(10),
+                  //                 width: 80,
+                  //                 height: 45,
+                  //                 decoration: BoxDecoration(
+                  //                   color: current==index
+                  //                           ?textColor
+                  //                           :greyColor6,
+                  //                   borderRadius: current == index
+                  //                   ? BorderRadius.circular(15)
+                  //                   : BorderRadius.circular(10),
+                  //                   border: current == index
+                  //                   ? Border.all(color: greyColor, width: 2)
+                  //                   : null
+                  //                   ),
+                  //                 child: Center(
+                  //                   child: Text(
+                  //                     items[index],
+                  //                     style: GoogleFonts.laila(
+                  //                       fontWeight: FontWeight.w500,
+                  //                       color: current == index 
+                  //                       ? mainColor
+                  //                       : textColor
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             Visibility(
+                  //               visible: current ==index,
+                  //               child: Container(
+                  //                 width: 5,
+                  //                 height: 5,
+                  //                 decoration: BoxDecoration(
+                  //                   shape: BoxShape.circle,
+                  //                   color: textColor
+                  //                 ),
+                  //             ))
+                  //           ],
+                  //         );
+                  //     }),
+                  // ),
                 //  Container(
                 //   margin: EdgeInsets.only(top: 30),
                 //   width: double.infinity,

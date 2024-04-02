@@ -50,7 +50,7 @@ bool loading = false;
             const SizedBox(
               height: 100,
             ),
-              Padding(
+            Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

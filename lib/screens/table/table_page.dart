@@ -1,4 +1,5 @@
 import 'package:cafe_app/components/colors.dart';
+import 'package:cafe_app/components/dimensions.dart';
 import 'package:cafe_app/controllers/home_controller.dart';
 import 'package:cafe_app/main.dart';
 import 'package:cafe_app/screens/home/components/book_table.dart';
@@ -220,13 +221,16 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
     DateTime time_from = DateFormat('h:mm a').parse(timeFrom);
     DateTime time_to = DateFormat('h:mm a').parse(timeTo);
     String bookDate = convertTimeToPostgres(timeFrom, date);
-
+      
     ApiResponse response = await addTableToCart(
         bookDate, time_from.toString(), time_to.toString(), selectedTables, hours);
-
+      
     if (response.error == null) {
-      if (response.data == 200) {
+      if (response.data == '200') {
+          print("Response.data");
+        
         setState(() {
+            
           _cartMessage = "Table added to Cart";
           // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_cartMessage)));
           _loading = _loading ? !_loading : _loading;
@@ -333,7 +337,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                     Icons.calendar_month_sharp,
                                                     color: textColor,
                                                   ),
-                                                  labelText: "Select Date",
+                                                  labelText: "Pick a  Date",
                                                   labelStyle: TextStyle(
                                                       color: textColor),
                                                   hintText:
@@ -619,7 +623,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                   children: [
                                                     Container(
                                                       width: 10,
-                                                      height: 10,
+                                                      height: Dimensions.height15,
                                                       decoration: BoxDecoration(
                                                         color:
                                                             greyColor8, // Color for unavailable tables
@@ -643,7 +647,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                     ),
                                                     Container(
                                                       width: 10,
-                                                      height: 10,
+                                                      height: Dimensions.height15,
                                                       decoration: BoxDecoration(
                                                         color:
                                                             greyColor, // Color for unavailable tables
@@ -668,7 +672,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                                                     ),
                                                     Container(
                                                       width: 10,
-                                                      height: 10,
+                                                      height: Dimensions.height15,
                                                       decoration: BoxDecoration(
                                                         color: Color.fromARGB(
                                                             255,
@@ -702,7 +706,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
                               AnimatedPositioned(
                                 duration: const Duration(milliseconds: 500),
                                 top: controller.homeState == HomeState.normal
-                                    ? 220
+                                    ? 230
                                     : -(constraints.maxHeight - 100 * 2 - 85),
                                 left: 0,
                                 right: 0,
@@ -872,6 +876,7 @@ class _TablePageState extends State<TablePage> with TickerProviderStateMixin {
           setState(() {
             _productList = response.data as List<dynamic>;
             _loading = _loading ? !_loading : _loading;
+          
           });
         }
       } else {

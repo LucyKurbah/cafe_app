@@ -2,6 +2,7 @@ import 'package:cafe_app/components/colors.dart';
 import 'package:cafe_app/components/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../components/news_card_skelton.dart';
 import '../../services/api_response.dart';
 import '../../services/orders_service.dart';
@@ -12,7 +13,6 @@ class OrderDetails extends StatefulWidget {
   OrderDetails({super.key, required this.order_id});
 
   int order_id;
-
 
 
   @override
@@ -42,6 +42,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     if (response.error == null) {
       setState(() {
         _orderList = response.data as List<dynamic>;
+       
         _isLoading = false;
       });
     } else {
@@ -52,17 +53,37 @@ class _OrderDetailsState extends State<OrderDetails> {
     }
   }
 
-    bool shouldShowExtendButton() {
-  if (_orderList.isNotEmpty && _orderList[0].time_to != null) {
-    // Parse the string to a DateTime object
-  
-    DateTime timeTo = DateTime.parse(_orderList[0].time_to);
-    // Check if the parsed DateTime is before the current time
-    return timeTo.isAfter(currentTime);
-  }
-  return false; // Default to false if no data or time_to is null
-}
+// bool shouldShowExtendButton() {
+//   print("_____++++++______++++++______+++++++_____++++");
+ 
+//   if (_orderList.isNotEmpty && _orderList[0].time_to != null) {
+//     String dateTimeString = "${DateTime.now().toString().split(" ")[0]} ${_orderList[0].time_to}";
+//     DateTime timeTo = DateTime.parse(dateTimeString);
+//      print(timeTo);
+//      print(currentTime);
+//     print(timeTo.isAfter(currentTime));
+//     return timeTo.isAfter(currentTime);
+//   }
+//   return false; 
+// }
+  bool shouldShowExtendButton() {
+    if (_orderList.isNotEmpty) {
+      DateTime currentTime = DateTime.now();
+      DateFormat dateFormat = DateFormat("MMM d'th', yyyy HH:mm:ss");
+      DateTime timeTo = dateFormat.parse("${_orderList[0].table_date} ${_orderList[0].time_to}");
 
+      // Case 1: If table_date is today's date
+      if (_orderList[0].table_date == dateFormat.format(currentTime)) {
+        return timeTo.isAfter(currentTime);
+      }
+
+      // Case 2: If table_date is after today's date
+      DateTime tableDate = DateFormat("MMM d'th', yyyy").parse(_orderList[0].table_date);
+      return tableDate.isAfter(currentTime);
+    }
+
+    return false; // Default to false if _orderList is empty
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,51 +113,48 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 180, 
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          BigText('Order Date: ${_orderList[0].order_date}',
-                              textColor, Dimensions.font20),
-                          SizedBox(height: Dimensions.height10),
-                          BigText('Total Amount: ₹ ${_orderList[0].total}',
-                              textColor, Dimensions.font20),
-                          SizedBox(height: Dimensions.height10),
-                          Center(
-                            child: Visibility(
-                              visible: shouldShowExtendButton(),
-                              child: 
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (_orderList.isNotEmpty) {
-                                      final flag = _orderList[0].flag;
-                                      if (flag == 'T') {
-                                        Navigator.of(context).pushNamed('/table');
-                                      } else if (flag == 'C') {
-                                        Navigator.of(context).pushNamed('/conference');
-                                      }
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30, left: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SmallText('Order Date: ${_orderList[0].order_date}',
+                            greyColor6, Dimensions.font15),
+                        SizedBox(height: Dimensions.height10),
+                        BigText('Total Amount: ₹ ${_orderList[0].total}',
+                            textColor, Dimensions.font20),
+                        SizedBox(height: Dimensions.height10),
+                        Center(
+                          child: Visibility(
+                            visible: shouldShowExtendButton(),
+                            child: 
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_orderList.isNotEmpty) {
+                                    final flag = _orderList[0].flag;
+                                    if (flag == 'T') {
+                                      Navigator.of(context).pushNamed('/table');
+                                    } else if (flag == 'C') {
+                                      Navigator.of(context).pushNamed('/conference');
                                     }
-                                  },
-                                  
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.blueGrey, // Button background color
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10), // Button border radius
-                                    ),
+                                  }
+                                },
+                                
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.blueGrey, // Button background color
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10), // Button border radius
                                   ),
-                                  child: Text('Extend Time',style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.7)),
-                                )
-                            ),
+                                ),
+                                child: Text('Extend Time',style: TextStyle(
+                                                  color: textColor,
+                                                  fontSize: 18,
+                                                  letterSpacing: 0.7)),
+                              )
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
